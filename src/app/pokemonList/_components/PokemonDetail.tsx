@@ -19,7 +19,7 @@ import { Autoplay, Pagination, Navigation } from "swiper/modules";
 export const PokemonDetail = ({ id }: { id: string }) => {
   const {
     data: pokemon,
-    isLoading,
+    isPending,
     error,
   } = useQuery<Pokemon>({
     queryKey: ["pokemonDetail", id],
@@ -30,8 +30,8 @@ export const PokemonDetail = ({ id }: { id: string }) => {
     enabled: !!id,
   });
 
-  if (isLoading || !pokemon) {
-    return <Loading text="포켓몬아 안녕!" />;
+  if (isPending || !pokemon) {
+    return <Loading />;
   }
 
   if (error) {
