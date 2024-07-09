@@ -6,7 +6,6 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
 
 export const PokemonDetail = ({ id }: { id: string }) => {
   const {
