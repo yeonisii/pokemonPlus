@@ -1,12 +1,21 @@
 "use client";
 
 import Loading from "@/app/components/Loading";
-import type { Pokemon } from "@/types/type.pokemon";
+import type { Pokemon, EvolutionDetail } from "@/types/type.pokemon";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+
+// Swiper.js import 추가
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/autoplay';
+import 'swiper/css/pagination';
+import 'swiper/css/navigation';
+
+import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 
 export const PokemonDetail = ({ id }: { id: string }) => {
   const {
@@ -37,10 +46,6 @@ export const PokemonDetail = ({ id }: { id: string }) => {
         <h2 className="text-3xl font-bold mb-6 text-center">
           {pokemon.korean_name}
         </h2>
-        <div className="mb-2 text-gray-700 text-center">
-          {pokemon.description}
-        </div>
-
         <div className="flex justify-center mb-6">
           {pokemon?.sprites?.front_default && (
             <Image
@@ -51,7 +56,9 @@ export const PokemonDetail = ({ id }: { id: string }) => {
             />
           )}
         </div>
-
+        <div className="mb-2 text-gray-700 text-center">
+          {pokemon.description}
+        </div>
         <div className="info mb-4 text-center">
           No. <span className="font-bold">{pokemon.id}</span>
         </div>
@@ -94,6 +101,33 @@ export const PokemonDetail = ({ id }: { id: string }) => {
               </span>
             ))}
           </div>
+        </div>
+        {/* Swiper.js 사용하여 진화 과정 표시 */}
+        <div className="evolution text-sm mb-6">
+          <span className="font-bold">진화 과정:</span>
+          <Swiper
+            spaceBetween={30}
+            centeredSlides={true}
+            autoplay={{
+              delay: 2500,
+              disableOnInteraction: false,
+            }}
+            pagination={{
+              clickable: true,
+            }}
+            navigation={true}
+            modules={[Autoplay, Pagination, Navigation]}
+            className="mySwiper"
+          >
+            {pokemon?.evolutionChain?.map((evolution: EvolutionDetail, index) => (
+              <SwiperSlide key={index}>
+                <div className="evolution-stage text-center">
+                  <Image src={evolution.image} alt={evolution.korean_name} width={100} height={100} />
+                  <div className="text-lg font-bold">{evolution.korean_name}</div>
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
         </div>
         <div className="text-center">
           <Link

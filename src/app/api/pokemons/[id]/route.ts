@@ -13,6 +13,10 @@ export const GET = async (
       `https://pokeapi.co/api/v2/pokemon-species/${id}`
     );
 
+    const evolutionChainUrl = speciesResponse.data.evolution_chain.url; // 진화 체인 URL 가져오기
+    const evolutionResponse = await axios.get(evolutionChainUrl); // 진화 체인 데이터 가져오기
+
+
     const koreanName = speciesResponse.data.names?.find(
       (name: any) => name.language.name === "ko"
     );
@@ -59,6 +63,43 @@ export const GET = async (
       })
     );
 
+     // 진화 체인 데이터 추출 함수
+     const extractEvolutionChain = async (evolutionData: any) => {
+      let evolutionChain = [];
+      let current = evolutionData.chain;
+
+      while (current) {
+        const speciesName = current.species.name;
+        const speciesResponse = await axios.get(current.species.url);
+        const speciesKoreanName =
+          speciesResponse.data.names?.find(
+            (name: any) => name.language.name === "ko"
+          )?.name || speciesName;
+
+        const pokemonResponse = await axios.get(
+          `https://pokeapi.co/api/v2/pokemon/${speciesName}`
+        );
+        const pokemonImage = pokemonResponse.data.sprites.front_default;
+
+        evolutionChain.push({
+          name: speciesName,
+          korean_name: speciesKoreanName,
+          image: pokemonImage,
+        });
+
+        if (current.evolves_to.length > 0) {
+          current = current.evolves_to[0];
+        } else {
+          current = null;
+        }
+      }
+
+      return evolutionChain;
+    };
+
+    const evolutionChain = await extractEvolutionChain(evolutionResponse.data); // 진화 체인 데이터 포함
+
+
     const pokemonData = {
       ...response.data,
       korean_name: koreanName?.name || response.data.name,
@@ -66,6 +107,7 @@ export const GET = async (
       description, // 추가된 부분: 포켓몬 설명 포함
       abilities: abilitiesWithKoreanNames,
       moves: movesWithKoreanNames,
+      evolutionChain, // 추가된 부분: 진화 과정 포함
     };
 
     return NextResponse.json(pokemonData);
