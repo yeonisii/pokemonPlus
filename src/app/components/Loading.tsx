@@ -1,16 +1,36 @@
-"use client";
+import React, { useEffect, useState } from "react";
+import Image from "next/image";
+import gif from "../img/Animation2.gif";
+import styled from "styled-components";
 
-import { ClimbingBoxLoader } from "react-spinners";
+const LoadingWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; // 화면 전체 높이를 사용하여 중앙에 배치
+  background-color: #200f50; // 여기서 백그라운드 색깔을 이미지와 동일하게 설정
+`;
 
-const Loading = ({ text }: { text: string }) => {
+const LoadingComponent = () => {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 5000);
+
+    return () => clearTimeout(timer); // 컴포넌트 언마운트 시 타이머 클리어
+  }, []);
+
+  if (!isLoading) {
+    return null; // 로딩이 끝난 후에는 아무 것도 렌더링하지 않음
+  }
+
   return (
-    <div className="w-full h-screen flex items-center justify-center absolute top-0 left-0">
-      <div className="flex flex-col items-center">
-        <ClimbingBoxLoader color="#ff0022" speedMultiplier={1} />
-        <p className="m-5 absoulte mx-auto">{text}</p>
-      </div>
-    </div>
+    <LoadingWrapper>
+      <Image src={gif} alt="Loading..." />
+    </LoadingWrapper>
   );
 };
 
-export default Loading;
+export default LoadingComponent;

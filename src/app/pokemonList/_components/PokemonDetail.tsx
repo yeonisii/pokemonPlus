@@ -9,18 +9,18 @@ import Link from "next/link";
 import React from "react";
 
 // Swiper.js import 추가
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
-import 'swiper/css/autoplay';
-import 'swiper/css/pagination';
-import 'swiper/css/navigation';
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/autoplay";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
 
-import { Autoplay, Pagination, Navigation } from 'swiper/modules';
+import { Autoplay, Pagination, Navigation } from "swiper/modules";
 
 export const PokemonDetail = ({ id }: { id: string }) => {
   const {
     data: pokemon,
-    isLoading,
+    isPending,
     error,
   } = useQuery<Pokemon>({
     queryKey: ["pokemonDetail", id],
@@ -31,8 +31,8 @@ export const PokemonDetail = ({ id }: { id: string }) => {
     enabled: !!id,
   });
 
-  if (isLoading || !pokemon) {
-    return <Loading text="포켓몬아 안녕!" />;
+  if (isPending || !pokemon) {
+    return <Loading />;
   }
 
   if (error) {
@@ -119,14 +119,23 @@ export const PokemonDetail = ({ id }: { id: string }) => {
             modules={[Autoplay, Pagination, Navigation]}
             className="mySwiper"
           >
-            {pokemon?.evolutionChain?.map((evolution: EvolutionDetail, index) => (
-              <SwiperSlide key={index}>
-                <div className="evolution-stage text-center">
-                  <Image src={evolution.image} alt={evolution.korean_name} width={100} height={100} />
-                  <div className="text-lg font-bold">{evolution.korean_name}</div>
-                </div>
-              </SwiperSlide>
-            ))}
+            {pokemon?.evolutionChain?.map(
+              (evolution: EvolutionDetail, index) => (
+                <SwiperSlide key={index}>
+                  <div className="evolution-stage text-center">
+                    <Image
+                      src={evolution.image}
+                      alt={evolution.korean_name}
+                      width={100}
+                      height={100}
+                    />
+                    <div className="text-lg font-bold">
+                      {evolution.korean_name}
+                    </div>
+                  </div>
+                </SwiperSlide>
+              )
+            )}
           </Swiper>
         </div>
         <div className="text-center">
