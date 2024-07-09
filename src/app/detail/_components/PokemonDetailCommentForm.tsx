@@ -20,6 +20,8 @@ const PokemonDetailCommentForm = () => {
             id="comment"
             placeholder="포켓몬에 대해 자유롭게 의견을 말해주세요"
             className="flex-grow min-w-0 p-2 border rounded h-[100px]"
+            value={comment}
+            onChange={(event) => setComment(event.target.value)}
           />
           <button className="whitespace-nowrap font-bold">등록</button>
         </form>
