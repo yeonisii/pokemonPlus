@@ -43,6 +43,12 @@ export const PokemonDetail = ({ id }: { id: string }) => {
           : "border-black"
       }`}
     >
+      {/* 추가된 부분: 포켓몬 설명 표시 */}
+      {pokemon.description && (
+        <div>
+          {pokemon.description}
+        </div>
+      )}
       <div>
         No. <span className="font-bold">{pokemon.id}</span>
       </div>
@@ -57,7 +63,7 @@ export const PokemonDetail = ({ id }: { id: string }) => {
       )}
       <div className="font-normal">{pokemon.korean_name}</div>
       <div>
-        <span>키:{pokemon.height}</span>
+        <span>키: {pokemon.height}</span>
         <span>몸무게: {pokemon.weight}</span>
       </div>
       <div>

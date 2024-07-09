@@ -17,6 +17,12 @@ export const GET = async (
       (name: any) => name.language.name === "ko"
     );
 
+    // 포켓몬 설명 가져오기
+    const description =
+      speciesResponse.data.flavor_text_entries?.find(
+        (entry: any) => entry.language.name === "ko"
+      )?.flavor_text || "No description available";
+
     const typesWithKoreanNames = await Promise.all(
       response.data.types.map(async (type: any) => {
         const typeResponse = await axios.get(type.type.url);
@@ -57,6 +63,7 @@ export const GET = async (
       ...response.data,
       korean_name: koreanName?.name || response.data.name,
       types: typesWithKoreanNames,
+      description, // 추가된 부분: 포켓몬 설명 포함
       abilities: abilitiesWithKoreanNames,
       moves: movesWithKoreanNames,
     };

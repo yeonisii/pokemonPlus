@@ -9,4 +9,5 @@ export type Pokemon = {
   types: { type: { name: string; korean_name: string } }[];
   abilities: { ability: { name: string; korean_name: string } }[];
   moves: { move: { name: string; korean_name: string } }[];
+  description: string; //포켓몬 설명 불러오기
 };
