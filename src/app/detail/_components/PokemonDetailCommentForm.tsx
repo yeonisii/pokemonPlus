@@ -1,7 +1,11 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import { MdOutlineCatchingPokemon } from "react-icons/md";
 
 const PokemonDetailCommentForm = () => {
+  const [comment, setComment] = useState("");
+
   return (
     <div className="flex justify-center flex-col items-center">
       <h1 className="flex border-b-2 w-5/6 justify-center p-2">
