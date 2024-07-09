@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { Inter } from "next/font/google";
 import HeaderComponent from "../components/Header";
 import Providers from "../queryClient/QueryClient";
+import FooterComponent from "../components/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,6 +21,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <HeaderComponent />
         <Providers>{children} </Providers>
+        <FooterComponent />
       </body>
     </html>
   );

@@ -27,7 +27,7 @@ export const PokemonDetail = ({ id }: { id: string }) => {
   });
 
   if (isPending || !pokemon) {
-    return <Loading text="포켓몬아 안녕!" />;
+    return <Loading />;
   }
 
   if (error) {
