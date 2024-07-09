@@ -3,7 +3,9 @@
 import React from "react";
 import styled from "styled-components";
 import Image from "next/image";
-import logo from "../img/pokemonlogo.png"; // 로고 이미지를 로드합니다.
+import logo from "../img/pokemonlogo_nukki.png";
+import searchicon from "../img/searchicon.png";
+import usericon from "../img/usericon.png";
 
 const Header = styled.header`
   display: flex;
@@ -11,13 +13,13 @@ const Header = styled.header`
   justify-content: space-between;
   padding: 10px 20px;
   background-color: #e5e7eb;
-  border-bottom: 2px solid #a855f7;
 `;
 
 const LogoContainer = styled.div`
   display: flex;
   align-items: center;
-  height: 40px; // 이미지 높이와 동일하게 설정
+  height: 40px;
+  cursor: pointer;
 `;
 
 const SearchContainer = styled.div`
@@ -27,6 +29,7 @@ const SearchContainer = styled.div`
   padding: 5px;
   border-radius: 5px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  width: 400px;
 `;
 
 const SearchInput = styled.input`
@@ -34,6 +37,7 @@ const SearchInput = styled.input`
   outline: none;
   padding: 5px;
   margin-right: 5px;
+  flex-grow: 1;
 `;
 
 const SearchButton = styled.button`
@@ -49,12 +53,15 @@ const UserContainer = styled.div`
   align-items: center;
 `;
 
-const UserIcon = styled.div`
-  background: url("/path/to/user-icon.png") no-repeat center center;
-  background-size: cover;
-  width: 24px;
+const UserIconWrapper = styled.div`
+  cursor: pointer;
+`;
+
+const Divider = styled.div`
   height: 24px;
-  margin-right: 10px;
+  width: 2px;
+  background-color: #374151;
+  margin: 0 10px;
 `;
 
 const SignUpButton = styled.button`
@@ -65,6 +72,8 @@ const SignUpButton = styled.button`
   border-radius: 5px;
   cursor: pointer;
   font-size: 16px;
+  width: 144px;
+  height: 40px;
 `;
 
 const HeaderComponent = () => {
@@ -75,27 +84,21 @@ const HeaderComponent = () => {
           src={logo}
           alt="Pokemon Logo"
           layout="fixed"
-          width={100}
-          height={40}
+          width={160}
+          height={82}
         />
       </LogoContainer>
       <SearchContainer>
         <SearchInput type="text" placeholder="Search..." />
         <SearchButton>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            fill="currentColor"
-            className="bi bi-search"
-            viewBox="0 0 16 16"
-          >
-            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001a1 1 0 0 0-.117.195l-3.85 3.85a1 1 0 0 0 1.415 1.415l3.85-3.85a1 1 0 0 0 .195-.117h.001a6.5 6.5 0 0 0 1.398-1.397zm-5.6-1.697a5.5 5.5 0 1 1 7.778 0 5.5 5.5 0 0 1-7.778 0z" />
-          </svg>
+          <Image src={searchicon} alt="Search Icon" width={24} height={24} />
         </SearchButton>
       </SearchContainer>
       <UserContainer>
-        <UserIcon />
+        <UserIconWrapper>
+          <Image src={usericon} alt="User Icon" width={40} height={40} />
+        </UserIconWrapper>
+        <Divider />
         <SignUpButton>Sign up</SignUpButton>
       </UserContainer>
     </Header>
