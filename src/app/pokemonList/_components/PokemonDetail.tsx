@@ -11,22 +11,18 @@ import React from "react";
 export const PokemonDetail = ({ id }: { id: string }) => {
   const {
     data: pokemon,
-    isPending,
+    isLoading,
     error,
   } = useQuery<Pokemon>({
     queryKey: ["pokemonDetail", id],
     queryFn: async () => {
-      try {
-        const { data } = await axios.get(`/api/pokemons/${id}`);
-        return data;
-      } catch (error) {
-        console.log(error);
-      }
+      const { data } = await axios.get(`/api/pokemons/${id}`);
+      return data;
     },
     enabled: !!id,
   });
 
-  if (isPending || !pokemon) {
+  if (isLoading || !pokemon) {
     return <Loading text="포켓몬아 안녕!" />;
   }
 
@@ -36,60 +32,78 @@ export const PokemonDetail = ({ id }: { id: string }) => {
   }
 
   return (
-    <div
-      className={`w-1/2 xl:w-1/2 md:w-1/2 sm:w-2/3 min-[320px]:w-full flex flex-col bg-white border-2 p-4 mx-auto my-4 text-center justify-center ${
-        pokemon.base_experience >= 290 && pokemon.id > 143 && pokemon.id !== 149
-          ? "border-rainbow "
-          : "border-black"
-      }`}
-    >
-      {/* 추가된 부분: 포켓몬 설명 표시 */}
-      {pokemon.description && (
-        <div>
+    <div className="container mx-auto p-4">
+      <div className="pokemon-details bg-white text-black p-8 rounded-lg mx-auto shadow-lg max-w-xl">
+        <h2 className="text-3xl font-bold mb-6 text-center">
+          {pokemon.korean_name}
+        </h2>
+        <div className="mb-2 text-gray-700 text-center">
           {pokemon.description}
         </div>
-      )}
-      <div>
-        No. <span className="font-bold">{pokemon.id}</span>
-      </div>
-      {pokemon.sprites.front_default && (
-        <Image
-          src={pokemon.sprites.front_default}
-          alt={pokemon.name}
-          width={150}
-          height={150}
-          className="mx-auto"
-        />
-      )}
-      <div className="font-normal">{pokemon.korean_name}</div>
-      <div>
-        <span>키: {pokemon.height}</span>
-        <span>몸무게: {pokemon.weight}</span>
-      </div>
-      <div>
-        <span>
-          {pokemon.types.map((item, index) => (
-            <span key={index} className="mr-2">
-              {item.type.korean_name}
+
+        <div className="flex justify-center mb-6">
+          {pokemon?.sprites?.front_default && (
+            <Image
+              src={pokemon.sprites.front_default}
+              alt={pokemon.korean_name}
+              width={150}
+              height={150}
+            />
+          )}
+        </div>
+
+        <div className="info mb-4 text-center">
+          No. <span className="font-bold">{pokemon.id}</span>
+        </div>
+        <div className="info mb-4 text-center">
+          <span className="font-bold">이름: </span> {pokemon.korean_name}
+        </div>
+        <div className="info mb-4 text-center">
+          <span className="font-bold">키: </span> {pokemon.height / 10} m{" "}
+          <span className="font-bold">무게: </span> {pokemon.weight / 10} kg
+        </div>
+        <div className="info mb-6 text-center">
+          <span className="font-bold">타입: </span>
+          {pokemon?.types?.map((typeInfo, index) => (
+            <span
+              key={index}
+              className="type bg-orange-500 text-white py-1 px-2 rounded ml-2"
+            >
+              {typeInfo.type.korean_name}
             </span>
           ))}
-        </span>
-      </div>
-      <div>
-        <div>{pokemon.korean_name}의 기술</div>
-        <div>
-          {pokemon.moves.map((item, index) => (
-            <span key={index} className="mr-4 whitespace-nowrap">
-              {item.move.korean_name}
+          <span className="font-bold ml-4">특성: </span>
+          {pokemon?.abilities?.map((abilityInfo, index) => (
+            <span
+              key={index}
+              className="specialty bg-green-500 text-white py-1 px-2 rounded ml-2"
+            >
+              {abilityInfo.ability.korean_name}
             </span>
           ))}
         </div>
+        <div className="description text-sm mb-6">
+          <span className="font-bold">기술:</span>
+          <div className="flex flex-wrap justify-center mt-2">
+            {pokemon?.moves?.map((moveInfo, index) => (
+              <span
+                key={index}
+                className="block bg-gray-200 text-black py-1 px-2 rounded m-1"
+              >
+                {moveInfo.move.korean_name}
+              </span>
+            ))}
+          </div>
+        </div>
+        <div className="text-center">
+          <Link
+            href="/pokemonList"
+            className="back-button inline-block bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors"
+          >
+            뒤로 가기
+          </Link>
+        </div>
       </div>
-      <Link href="/pokemonList">
-        <button className="border-2 border-solid bg-blue-600 text-white font-bold m-2 px-4 py-2 rounded-xl hover:bg-blue-400">
-          뒤로 가기
-        </button>
-      </Link>
     </div>
   );
 };
