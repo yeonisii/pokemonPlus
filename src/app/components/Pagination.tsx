@@ -12,7 +12,7 @@ const Pagination: React.FC<PaginationProps> = ({
   setPage,
 }) => {
   return (
-    <div className="flex justify-center mt-8">
+    <div className="flex justify-center mb-8">
       <button
         onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
         disabled={page === 1}
