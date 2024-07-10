@@ -31,7 +31,7 @@ const PokemonDetailCommentForm = ({ id }: { id: string }) => {
     event.preventDefault();
 
     const newComment = {
-      // 임시값
+      // TODO 임시값
       user_id: null,
       nickname: null,
       pokemon_id: id,

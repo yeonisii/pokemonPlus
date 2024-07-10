@@ -15,17 +15,25 @@ interface Comment {
 
 interface PokemonDetailCommentItemProps {
   id: string;
-  data: Comment | null;
+  comment: Comment | null;
+  index: number;
 }
 
 const PokemonDetailCommentItem = ({
   id,
-  data,
+  comment,
+  index,
 }: PokemonDetailCommentItemProps) => {
   // TODO CSS 할 것...
-  if (data === null) {
+  if (comment === null) {
     return <div> 댓글이 없어용 </div>;
   }
+
+  console.log(id);
+  console.log(index % 2);
+  console.log(comment);
+
+  // TODO created_at 날짜 수정하기!
 
   return (
     <div className="border-t-2 w-5/6 flex mx-auto flex-col">
@@ -38,9 +46,9 @@ const PokemonDetailCommentItem = ({
             <div className="flex flex-col gap-2">
               <div className="flex justify-between px-2">
                 <div>닉네임</div>
-                <div>{data?.created_at}</div>
+                <div>{comment?.created_at}</div>
               </div>
-              <div className="p-2 border-2">{data?.comment}</div>
+              <div className="p-2 border-2">{comment?.comment}</div>
             </div>
           </div>
           <div className="flex gap-4">
@@ -54,7 +62,7 @@ const PokemonDetailCommentItem = ({
         <svg
           className={`absolute w-[25%] h-[25%] top-[33%] fill-[#ffffff] 
           ${
-            id && parseInt(id) % 2 === 0
+            index % 2 === 0
               ? "right-[-12%] rotate-90"
               : "left-[-12%] rotate-[270deg]"
           }`}

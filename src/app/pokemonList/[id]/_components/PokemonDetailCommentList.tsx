@@ -3,7 +3,7 @@
 import React from "react";
 import PokemonDetailCommentItem from "./PokemonDetailCommentItem";
 import { allComments } from "@/utils/supabase";
-import { QueryClient, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 
 const PokemonDetailCommentList = ({ id }: { id: string }) => {
   const { data, isPending, error } = useQuery({
@@ -17,13 +17,18 @@ const PokemonDetailCommentList = ({ id }: { id: string }) => {
 
   return (
     <ul>
-      {/* TODO 맵으로 뿌리기 */}
+      {/* TODO 댓글 맵으로 뿌리기 */}
       {data ? (
-        data.map((pokemon) => (
-          <PokemonDetailCommentItem key={pokemon.row} id={id} data={pokemon} />
+        data.map((comment, index) => (
+          <PokemonDetailCommentItem
+            key={comment.row}
+            id={id}
+            comment={comment}
+            index={index}
+          />
         ))
       ) : (
-        <PokemonDetailCommentItem id={id} data={null} />
+        <PokemonDetailCommentItem id={id} comment={null} index={0} />
       )}
     </ul>
   );
