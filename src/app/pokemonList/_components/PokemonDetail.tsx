@@ -6,7 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useState, useEffect } from "react"; 
 
 // Swiper.js import 추가
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -31,6 +31,8 @@ export const PokemonDetail = ({ id }: { id: string }) => {
     enabled: !!id,
   });
 
+  const [showAllMoves, setShowAllMoves] = useState(false); // showAllMoves 상태 추가
+
   if (isPending || !pokemon) {
     return <Loading />;
   }
@@ -39,6 +41,9 @@ export const PokemonDetail = ({ id }: { id: string }) => {
     console.log(error);
     return <div>ERRRRRRRRRRRR</div>;
   }
+
+  // 기술 목록을 15개로 제한
+  const displayedMoves = showAllMoves ? pokemon.moves : pokemon.moves.slice(0, 15); 
 
   return (
     <div className="container mx-auto p-4">
@@ -92,7 +97,7 @@ export const PokemonDetail = ({ id }: { id: string }) => {
         <div className="description text-sm mb-6">
           <span className="font-bold">기술:</span>
           <div className="flex flex-wrap justify-center mt-2">
-            {pokemon?.moves?.map((moveInfo, index) => (
+            {displayedMoves.map((moveInfo, index) => ( // displayedMoves 사용
               <span
                 key={index}
                 className="block bg-gray-200 text-black py-1 px-2 rounded m-1"
@@ -101,6 +106,14 @@ export const PokemonDetail = ({ id }: { id: string }) => {
               </span>
             ))}
           </div>
+          {pokemon.moves.length > 15 && ( // 버튼 추가
+            <button
+              onClick={() => setShowAllMoves(!showAllMoves)}
+              className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
+            >
+              {showAllMoves ? "간단히 보기" : "전체 기술 보기"}
+            </button>
+          )}
         </div>
         {/* Swiper.js 사용하여 진화 과정 표시 */}
         <div className="evolution text-sm mb-6">
