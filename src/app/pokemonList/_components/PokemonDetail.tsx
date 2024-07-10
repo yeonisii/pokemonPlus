@@ -16,6 +16,7 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
+import LoadingComponent from "@/app/components/Loading";
 
 export const PokemonDetail = ({ id }: { id: string }) => {
   const {
@@ -32,13 +33,15 @@ export const PokemonDetail = ({ id }: { id: string }) => {
   });
 
   if (isPending || !pokemon) {
-    return <Loading />;
+    return <LoadingComponent />;
   }
 
   if (error) {
     console.log(error);
     return <div>ERRRRRRRRRRRR</div>;
   }
+
+  console.log(pokemon.korean_name);
 
   return (
     <div className="container mx-auto p-4">
