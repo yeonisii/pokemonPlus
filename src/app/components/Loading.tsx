@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import gif from "../img/Animation2.gif";
@@ -11,7 +13,7 @@ const LoadingWrapper = styled.div`
   background-color: #200f50; // 여기서 백그라운드 색깔을 이미지와 동일하게 설정
 `;
 
-const LoadingComponent = () => {
+const Loading = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -33,4 +35,4 @@ const LoadingComponent = () => {
   );
 };
 
-export default LoadingComponent;
+export default Loading;

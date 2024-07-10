@@ -1,6 +1,5 @@
 "use client";
 
-import Loading from "@/app/components/Loading";
 import type { Pokemon, EvolutionDetail } from "@/types/type.pokemon";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
@@ -16,6 +15,7 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
+import Loading from "@/app/components/Loading";
 
 export const PokemonDetail = ({ id }: { id: string }) => {
   const {

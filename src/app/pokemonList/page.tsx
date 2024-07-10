@@ -6,10 +6,10 @@ import React, { useState } from "react";
 import type { Pokemon } from "@/types/type.pokemon";
 import Link from "next/link";
 import Image from "next/image";
-import Loading from "../components/Loading";
 import Pagination from "../components/Pagination";
 import onLike from "../../../public/full_love.svg";
 import offLike from "../../../public/bin_love.svg";
+import Loading from "../components/Loading";
 
 const ITEMS_PER_PAGE: number = 20;
 
@@ -35,7 +35,7 @@ const PokemonPage = () => {
   });
 
   if (isPending || !data) {
-    return <Loading text="전설의 포켓몬을 확인해보세요!" />;
+    return <Loading />;
   }
 
   if (error) {
