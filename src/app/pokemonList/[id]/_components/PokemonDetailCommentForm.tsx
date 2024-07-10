@@ -1,10 +1,25 @@
 "use client";
 
+import { addComment } from "@/utils/supabase";
 import React, { useState } from "react";
 import { MdOutlineCatchingPokemon } from "react-icons/md";
 
-const PokemonDetailCommentForm = () => {
+const PokemonDetailCommentForm = ({ id }: { id: string }) => {
   const [comment, setComment] = useState("");
+
+  const submitComment = (event) => {
+    event.preventDefault();
+
+    const newComment = {
+      // 임시값
+      user_id: null,
+      nickname: null,
+      pokemon_id: id,
+      comment,
+    };
+    addComment(newComment);
+    setComment(comment);
+  };
 
   return (
     <div className="flex justify-center flex-col items-center">
@@ -14,7 +29,7 @@ const PokemonDetailCommentForm = () => {
         <MdOutlineCatchingPokemon className="mt-1" />
       </h1>
       <div className="flex justify-center p-4 m-4 border-2 w-5/6 rounded-xl bg-white">
-        <form className="flex gap-4 w-full">
+        <form className="flex gap-4 w-full" onSubmit={submitComment}>
           <input
             type="text"
             id="comment"

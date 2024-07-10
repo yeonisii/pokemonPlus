@@ -1,4 +1,6 @@
 import { PokemonDetail } from "../_components/PokemonDetail";
+import PokemonDetailCommentForm from "./_components/PokemonDetailCommentForm";
+import PokemonDetailCommentList from "./_components/PokemonDetailCommentList";
 
 type Props = {
   params: { id: string };
@@ -23,6 +25,10 @@ const PokemonDetailPage = ({ params: { id } }: { params: { id: string } }) => {
   return (
     <>
       <PokemonDetail id={id} />
+      <div className="bg-gray-300 h-[100vh] p-4 w-2/3 mx-auto">
+        <PokemonDetailCommentForm id={id} />
+        <PokemonDetailCommentList />
+      </div>
     </>
   );
 };
