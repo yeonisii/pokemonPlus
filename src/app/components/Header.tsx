@@ -1,11 +1,12 @@
 "use client";
 
-import React from "react";
+import React, { ChangeEvent } from "react";
 import styled from "styled-components";
 import Image from "next/image";
 import logo from "../img/pokemonlogo_nukki.png";
 import searchicon from "../img/searchicon.png";
 import usericon from "../img/usericon.png";
+import { useSearchStore } from "@/zustand/useSearchStore";
 
 const Header = styled.header`
   display: flex;
@@ -76,7 +77,13 @@ const SignUpButton = styled.button`
   height: 40px;
 `;
 
-const HeaderComponent = () => {
+const HeaderComponent: React.FC = () => {
+  const setSearchTerm = useSearchStore((state) => state.setSearchTerm);
+
+  const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+  };
+
   return (
     <Header>
       <LogoContainer>

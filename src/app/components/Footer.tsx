@@ -10,10 +10,6 @@ const Container = styled.div`
   flex-direction: column;
 `;
 
-const MainContent = styled.main`
-  flex: 1;
-`;
-
 const Footer = styled.footer`
   display: flex;
   justify-content: center;
