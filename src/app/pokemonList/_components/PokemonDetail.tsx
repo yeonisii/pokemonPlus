@@ -41,6 +41,9 @@ export const PokemonDetail = ({ id }: { id: string }) => {
     return <div>ERRRRRRRRRRRR</div>;
   }
 
+  console.log(pokemon.korean_name);
+  
+
   return (
     <div className="container mx-auto p-4">
       <div className="pokemon-details bg-white text-black p-8 rounded-lg mx-auto shadow-lg max-w-xl">

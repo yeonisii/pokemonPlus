@@ -10,12 +10,14 @@ import Loading from "../components/Loading";
 import Pagination from "../components/Pagination";
 import onLike from "../../../public/full_love.svg";
 import offLike from "../../../public/bin_love.svg";
+import { useSearchStore } from "@/zustand/useSearchStore";
 
 const ITEMS_PER_PAGE: number = 20;
 
-const PokemonPage = () => {
+const PokemonPage: React.FC = () => {
   const [page, setPage] = useState<number>(1);
   const [likedPokemons, setLikedPokemons] = useState<number[]>([]);
+  const searchTerm = useSearchStore((state) => state.searchTerm);
 
   const { data, isPending, error } = useQuery<{
     data: Pokemon[];
@@ -52,11 +54,15 @@ const PokemonPage = () => {
     }
   };
 
+  const filteredPokemons = data.data.filter((pokemon) =>
+    pokemon.korean_name.includes(searchTerm)
+  );
+
   return (
     <div className="flex flex-col items-center h-full my-8">
       <h1 className="text-3xl text-center font-bold mt-4 mb-8">Pokémon</h1>
       <ul className="grid gap-6 justify-center grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-8">
-        {data.data.map((item) => (
+        {filteredPokemons.map((item) => (
           <li
             key={item.id}
             className="relative flex flex-col items-center p-4 bg-white border-2 border-solid border-gray-200 rounded-lg shadow-md hover:shadow-lg"
