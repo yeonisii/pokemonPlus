@@ -8,7 +8,6 @@ import psyduck from "../img/psyduckicon.png"; // 싸이덕 아이콘
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  min-height: 100vh; // 전체 화면을 차지하도록 설정
   position: relative; // 자식 요소의 position 설정을 위해 필요
 `;
 
@@ -21,8 +20,6 @@ const Footer = styled.footer`
   color: #ffffff;
   width: 100%;
   height: 70px;
-  position: fixed;
-  bottom: 0;
 `;
 
 const CenterContainer = styled.div`

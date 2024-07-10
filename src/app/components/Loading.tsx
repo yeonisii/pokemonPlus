@@ -9,7 +9,12 @@ const LoadingWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh; // 화면 전체 높이를 사용하여 중앙에 배치
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
   background-color: #200f50; // 여기서 백그라운드 색깔을 이미지와 동일하게 설정
 `;
 

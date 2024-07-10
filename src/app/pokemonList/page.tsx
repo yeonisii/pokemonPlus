@@ -22,7 +22,7 @@ const PokemonPage: React.FC = () => {
   // 전체 데이터를 가져오는 함수
   const fetchAllPokemons = async () => {
     try {
-      const res = await axios.get("/api/pokemons");
+      const res = await axios.get<{ data: Pokemon[] }>("/api/pokemons");
       const { data } = res.data;
       setAllPokemons(data); // 전체 포켓몬 데이터 상태 업데이트
     } catch (error) {
@@ -42,7 +42,7 @@ const PokemonPage: React.FC = () => {
   }>({
     queryKey: ["pokemons", page],
     queryFn: async () => {
-      const res = await axios.get(`/api/pokemons?page=${page}`);
+      const res = await axios.get<{ data: Pokemon[]; hasNextPage: boolean; totalPages: number }>(`/api/pokemons?page=${page}`);
       return res.data;
     },
     keepPreviousData: true,
@@ -56,7 +56,7 @@ const PokemonPage: React.FC = () => {
     return <div>에러가 발생했습니다.</div>;
   }
 
-  const totalPages: number = paginatedData ? Math.ceil(paginatedData.totalPages) : 0;
+  const totalPages: number = paginatedData ? paginatedData.totalPages : 0;
 
   // 좋아요 기능
   const toggleLike = (pokemonId: number) => {
