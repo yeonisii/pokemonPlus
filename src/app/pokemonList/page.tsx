@@ -53,7 +53,7 @@ const PokemonPage = () => {
   };
 
   return (
-    <div className="flex flex-col items-center h-dvh">
+    <div className="flex flex-col items-center h-full my-8">
       <h1 className="text-3xl text-center font-bold mt-4 mb-8">Pokémon</h1>
       <ul className="grid gap-6 justify-center grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-8">
         {data.data.map((item) => (
