@@ -15,7 +15,7 @@ import { EffectCards } from "swiper/modules";
 export const PokemonDetail = ({ id }: { id: string }) => {
   const {
     data: pokemon,
-    isLoading,
+    isPending,
     error,
   } = useQuery<Pokemon>({
     queryKey: ["pokemonDetail", id],
@@ -45,7 +45,7 @@ export const PokemonDetail = ({ id }: { id: string }) => {
     }
   }, [initialSlide]);
 
-  if (isLoading || !pokemon) {
+  if (isPending || !pokemon) {
     return <Loading />;
   }
 
