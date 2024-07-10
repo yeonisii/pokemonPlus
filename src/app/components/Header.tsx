@@ -87,16 +87,14 @@ const HeaderComponent: React.FC = () => {
   return (
     <Header>
       <LogoContainer>
-        <Image
-          src={logo}
-          alt="Pokemon Logo"
-          layout="fixed"
-          width={160}
-          height={82}
-        />
+        <Image src={logo} alt="Pokemon Logo" width={160} height={82} />
       </LogoContainer>
       <SearchContainer>
-        <SearchInput type="text" placeholder="Search..." />
+        <SearchInput
+          type="text"
+          placeholder="Search..."
+          onChange={handleSearch}
+        />
         <SearchButton>
           <Image src={searchicon} alt="Search Icon" width={24} height={24} />
         </SearchButton>
