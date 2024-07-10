@@ -5,11 +5,19 @@ import { createClient } from "./client";
 const supabase = createClient();
 
 //댓글 불러오기
-export const allComments = async () => {
-  const { data: comments, error } = await supabase.from("comments").select("*");
+export const allComments = async (id) => {
+  const { data: comments, error } = await supabase
+    .from("comments")
+    .select("*")
+    .eq("pokemon_id", id);
 
   if (error) {
     console.log("불러오기 실패!", error);
+  }
+
+  // 빈 배열일 때 null 반환
+  if (comments?.length === 0) {
+    return null;
   }
 
   return comments;

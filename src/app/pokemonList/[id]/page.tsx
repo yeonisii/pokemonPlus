@@ -6,6 +6,8 @@ type Props = {
   params: { id: string };
 };
 
+
+
 export async function generateMetadata({ params: { id } }: Props) {
   try {
     const res = await fetch(
@@ -22,12 +24,13 @@ export async function generateMetadata({ params: { id } }: Props) {
 }
 
 const PokemonDetailPage = ({ params: { id } }: { params: { id: string } }) => {
+  console.log(id);
   return (
     <>
       <PokemonDetail id={id} />
       <div className="bg-gray-300 h-[100vh] p-4 w-2/3 mx-auto">
         <PokemonDetailCommentForm id={id} />
-        <PokemonDetailCommentList />
+        <PokemonDetailCommentList id={id} />
       </div>
     </>
   );

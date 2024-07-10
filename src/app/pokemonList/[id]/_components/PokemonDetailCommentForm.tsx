@@ -5,9 +5,11 @@ import React, { useState } from "react";
 import { MdOutlineCatchingPokemon } from "react-icons/md";
 
 const PokemonDetailCommentForm = ({ id }: { id: string }) => {
+  // TODO formData로 바꾸기
   const [comment, setComment] = useState("");
 
-  const submitComment = (event) => {
+  // TODO 탄스택으로 바꾸거나 라우트 핸들러로 바꾸기?
+  const submitComment = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const newComment = {
@@ -18,7 +20,9 @@ const PokemonDetailCommentForm = ({ id }: { id: string }) => {
       comment,
     };
     addComment(newComment);
-    setComment(comment);
+    setComment("");
+    // TODO 토스티파이로 바꾸기
+    alert("댓글 작성이 완료되었습니다.");
   };
 
   return (
