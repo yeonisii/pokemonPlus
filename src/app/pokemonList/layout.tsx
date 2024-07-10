@@ -6,10 +6,10 @@ import FooterComponent from "../components/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export const metadata: Metadata = {
-  title: "My Pokemon Book",
-  description: "나만의 포켓몬 도감!",
-};
+// export const metadata: Metadata = {
+//   title: "My Pokemon Book",
+//   description: "나만의 포켓몬 도감!",
+// };
 
 export default function RootLayout({
   children,
