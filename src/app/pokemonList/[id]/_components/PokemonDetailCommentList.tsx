@@ -3,11 +3,11 @@
 import React from "react";
 import PokemonDetailCommentItem from "./PokemonDetailCommentItem";
 import { allComments } from "@/utils/supabase";
-import { useQuery } from "@tanstack/react-query";
+import { QueryClient, useQuery } from "@tanstack/react-query";
 
 const PokemonDetailCommentList = ({ id }: { id: string }) => {
   const { data, isPending, error } = useQuery({
-    queryKey: ["Allcomments"],
+    queryKey: ["Allcomments", id],
     queryFn: () => allComments(id),
   });
 

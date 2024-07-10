@@ -1,14 +1,32 @@
 "use client";
 
 import { addComment } from "@/utils/supabase";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { MdOutlineCatchingPokemon } from "react-icons/md";
 
 const PokemonDetailCommentForm = ({ id }: { id: string }) => {
   // TODO formData로 바꾸기
   const [comment, setComment] = useState("");
+  const queryClient = useQueryClient();
 
-  // TODO 탄스택으로 바꾸거나 라우트 핸들러로 바꾸기?
+  const addMutation = useMutation({
+    mutationFn:
+      // TODO 임시 값
+      (newComment: {
+        user_id: null;
+        nickname: null;
+        pokemon_id: string;
+        comment: string;
+      }) => addComment(newComment),
+    onSuccess: () => {
+      // TODO 토스티파이로 바꾸기
+      queryClient.invalidateQueries({ queryKey: ["Allcomments", id] });
+      alert("댓글 작성이 완료되었습니다.");
+      setComment("");
+    },
+  });
+
   const submitComment = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -19,10 +37,7 @@ const PokemonDetailCommentForm = ({ id }: { id: string }) => {
       pokemon_id: id,
       comment,
     };
-    addComment(newComment);
-    setComment("");
-    // TODO 토스티파이로 바꾸기
-    alert("댓글 작성이 완료되었습니다.");
+    addMutation.mutate(newComment);
   };
 
   return (
