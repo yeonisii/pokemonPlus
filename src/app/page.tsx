@@ -10,7 +10,6 @@ export default function Home() {
           <span className="text-yellow-400">몬</span>
           <span className="text-green-600"> 도감</span>으로
           <span className="font-bold animate-[slideRight_0.5s_forwards]">
-            {" "}
             이동
           </span>
         </h1>
