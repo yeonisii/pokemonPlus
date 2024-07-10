@@ -13,15 +13,13 @@ export const GET = async (
       `https://pokeapi.co/api/v2/pokemon-species/${id}`
     );
 
-    const evolutionChainUrl = speciesResponse.data.evolution_chain.url; // 진화 체인 URL 가져오기
-    const evolutionResponse = await axios.get(evolutionChainUrl); // 진화 체인 데이터 가져오기
-
+    const evolutionChainUrl = speciesResponse.data.evolution_chain.url;
+    const evolutionResponse = await axios.get(evolutionChainUrl);
 
     const koreanName = speciesResponse.data.names?.find(
       (name: any) => name.language.name === "ko"
     );
 
-    // 포켓몬 설명 가져오기
     const description =
       speciesResponse.data.flavor_text_entries?.find(
         (entry: any) => entry.language.name === "ko"
@@ -63,8 +61,7 @@ export const GET = async (
       })
     );
 
-     // 진화 체인 데이터 추출 함수
-     const extractEvolutionChain = async (evolutionData: any) => {
+    const extractEvolutionChain = async (evolutionData: any) => {
       let evolutionChain = [];
       let current = evolutionData.chain;
 
@@ -81,10 +78,58 @@ export const GET = async (
         );
         const pokemonImage = pokemonResponse.data.sprites.front_default;
 
+        const moves = await Promise.all(
+          pokemonResponse.data.moves.map(async (move: any) => {
+            const moveResponse = await axios.get(move.move.url);
+            const koreanMoveName =
+              moveResponse.data.names?.find(
+                (name: any) => name.language.name === "ko"
+              )?.name || move.move.name;
+            return { ...move, move: { ...move.move, korean_name: koreanMoveName } };
+          })
+        );
+
+        const types = await Promise.all(
+          pokemonResponse.data.types.map(async (type: any) => {
+            const typeResponse = await axios.get(type.type.url);
+            const koreanTypeName =
+              typeResponse.data.names?.find(
+                (name: any) => name.language.name === "ko"
+              )?.name || type.type.name;
+            return { ...type, type: { ...type.type, korean_name: koreanTypeName } };
+          })
+        );
+
+        const abilities = await Promise.all(
+          pokemonResponse.data.abilities.map(async (ability: any) => {
+            const abilityResponse = await axios.get(ability.ability.url);
+            const koreanAbilityName =
+              abilityResponse.data.names?.find(
+                (name: any) => name.language.name === "ko"
+              )?.name || ability.ability.name;
+            return {
+              ...ability,
+              ability: { ...ability.ability, korean_name: koreanAbilityName },
+            };
+          })
+        );
+
+        const evolutionDescription =
+          speciesResponse.data.flavor_text_entries?.find(
+            (entry: any) => entry.language.name === "ko"
+          )?.flavor_text || "No description available";
+
         evolutionChain.push({
           name: speciesName,
           korean_name: speciesKoreanName,
           image: pokemonImage,
+          description: evolutionDescription,
+          moves: moves,
+          id: pokemonResponse.data.id,
+          height: pokemonResponse.data.height,
+          weight: pokemonResponse.data.weight,
+          types: types,
+          abilities: abilities,
         });
 
         if (current.evolves_to.length > 0) {
@@ -97,17 +142,16 @@ export const GET = async (
       return evolutionChain;
     };
 
-    const evolutionChain = await extractEvolutionChain(evolutionResponse.data); // 진화 체인 데이터 포함
-
+    const evolutionChain = await extractEvolutionChain(evolutionResponse.data);
 
     const pokemonData = {
       ...response.data,
       korean_name: koreanName?.name || response.data.name,
+      description,
       types: typesWithKoreanNames,
-      description, // 추가된 부분: 포켓몬 설명 포함
       abilities: abilitiesWithKoreanNames,
       moves: movesWithKoreanNames,
-      evolutionChain, // 추가된 부분: 진화 과정 포함
+      evolutionChain,
     };
 
     return NextResponse.json(pokemonData);
