@@ -11,6 +11,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/effect-cards";
 import { EffectCards } from "swiper/modules";
+import detail_bg from "@/app/img/detail_bg.png";
 
 export const PokemonDetail = ({ id }: { id: string }) => {
   const {
@@ -59,7 +60,14 @@ export const PokemonDetail = ({ id }: { id: string }) => {
     const displayedMoves = showAllMoves ? moves : moves.slice(0, 15);
 
     return (
-      <div className="pokemon-details bg-white text-black p-8 rounded-lg mx-auto shadow-lg max-w-xl">
+      <div
+        className="pokemon-details bg-white text-black p-8 rounded-lg mx-auto shadow-lg max-w-xl"
+        style={{
+          backgroundImage: `url(${detail_bg.src})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
         <h2 className="text-3xl font-bold mb-6 text-center">{pokeData.korean_name}</h2>
         <div className="flex justify-center mb-6">
           <Image
