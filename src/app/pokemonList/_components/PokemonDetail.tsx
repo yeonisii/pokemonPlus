@@ -61,16 +61,17 @@ export const PokemonDetail = ({ id }: { id: string }) => {
 
     return (
       <div
-        className="pokemon-details bg-white text-black p-8 rounded-2xl mx-auto border-8 border-gray-300" // 테두리 추가
+        className="pokemon-details bg-white text-black p-8 rounded-lg mx-auto shadow-lg max-w-xl"
         style={{
           backgroundImage: `url(${detail_bg.src})`,
           backgroundSize: "cover",
+          backgroundPosition: "center",
         }}
       >
         <div className="info mb-4 text-center">
           No. <span className="font-bold">{pokeData.id}</span>
         </div>
-        <h2 className="text-3xl font-bold mb-4 text-center">
+        <h2 className="text-3xl font-bold mb-6 text-center">
           {pokeData.korean_name}
         </h2>
         <div className="flex justify-center mb-6">
@@ -80,8 +81,9 @@ export const PokemonDetail = ({ id }: { id: string }) => {
               (pokeData as Pokemon).sprites.front_default
             }
             alt={pokeData.korean_name}
-            width={170}
-            height={170}
+            width={150}
+            height={150}
+            sizes="(max-width: 600px) 100px, 150px" // 적절한 크기로 설정
           />
         </div>
         <div className="mb-2 text-gray-700 text-center">
@@ -113,6 +115,7 @@ export const PokemonDetail = ({ id }: { id: string }) => {
           ))}
         </div>
         <div className="description text-sm mb-6">
+          <span className="font-bold">기술:</span>
           <div className="flex flex-wrap justify-center mt-2">
             {displayedMoves.map((moveInfo, index) => (
               <span
@@ -124,14 +127,12 @@ export const PokemonDetail = ({ id }: { id: string }) => {
             ))}
           </div>
           {moves.length > 15 && (
-            <div className="flex justify-center items-center mt-4">
-              <button
-                onClick={() => setShowAllMoves(!showAllMoves)}
-                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700 transition-colors"
-              >
-                {showAllMoves ? "간단히 보기" : "더보기"}
-              </button>
-            </div>
+            <button
+              onClick={() => setShowAllMoves(!showAllMoves)}
+              className="back-button inline-block bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors">
+            
+              {showAllMoves ? "간단히 보기" : "더보기"}
+            </button>
           )}
         </div>
       </div>
@@ -154,12 +155,13 @@ export const PokemonDetail = ({ id }: { id: string }) => {
         initialSlide={initialSlide} // 초기 슬라이드를 설정
       >
         {pokemon.evolutionChain.map((evolution, index) => (
-          <SwiperSlide key={index} className="swiper-custom-slide"> {/* 커스텀 클래스 추가 */}
+          <SwiperSlide key={index}>
             {createSlide(evolution as EvolutionDetail)}
           </SwiperSlide>
         ))}
       </Swiper>
-      <div className="text-center mt-8"></div>
+      <div className="text-center mt-8">
+      </div>
     </div>
   );
 };

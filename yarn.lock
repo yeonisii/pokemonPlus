@@ -561,7 +561,7 @@
   dependencies:
     "@tanstack/query-devtools" "5.50.1"
 
-"@tanstack/react-query@^5.49.2d":
+"@tanstack/react-query@^5.51.1":
   version "5.51.1"
   resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-5.51.1.tgz#e483b9c9011e079b89cf73ce447b2e06340b3f41"
   integrity sha512-s47HKFnQ4HOJAHoIiXcpna/roMMPZJPy6fJ6p4ZNVn8+/onlLBEDd1+xc8OnDuwgvecqkZD7Z2mnSRbcWefrKw==
