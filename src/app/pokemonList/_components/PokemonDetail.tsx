@@ -60,7 +60,7 @@ export const PokemonDetail = ({ id }: { id: string }) => {
 
     return (
       <div
-        className="pokemon-details bg-white text-black p-8 "
+        className="pokemon-details bg-white text-black p-8 rounded-2xl mx-auto border-8 border-gray-300" // 테두리 추가
         style={{
           backgroundImage: `url(${detail_bg.src})`,
           backgroundSize: "cover",
