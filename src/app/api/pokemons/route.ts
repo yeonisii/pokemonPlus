@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import axios from "axios";
 
-export const TOTAL_POKEMON = 1;
-const PAGE_SIZE = 1;
+export const TOTAL_POKEMON = 151;
+const PAGE_SIZE = 20;
 
 export const GET = async (request: Request) => {
   const { searchParams } = new URL(request.url);
