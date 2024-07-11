@@ -112,7 +112,6 @@ export const PokemonDetail = ({ id }: { id: string }) => {
           ))}
         </div>
         <div className="description text-sm mb-6">
-          <span className="font-bold">기술:</span>
           <div className="flex flex-wrap justify-center mt-2">
             {displayedMoves.map((moveInfo, index) => (
               <span
