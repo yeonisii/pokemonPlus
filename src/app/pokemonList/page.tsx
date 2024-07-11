@@ -35,14 +35,22 @@ const PokemonPage: React.FC = () => {
   }, []);
 
   // 페이지네이션 기능
-  const { data: paginatedData, isFetching, error } = useQuery<{
+  const {
+    data: paginatedData,
+    isFetching,
+    error,
+  } = useQuery<{
     data: Pokemon[];
     hasNextPage: boolean;
     totalPages: number;
   }>({
     queryKey: ["pokemons", page],
     queryFn: async () => {
-      const res = await axios.get<{ data: Pokemon[]; hasNextPage: boolean; totalPages: number }>(`/api/pokemons?page=${page}`);
+      const res = await axios.get<{
+        data: Pokemon[];
+        hasNextPage: boolean;
+        totalPages: number;
+      }>(`/api/pokemons?page=${page}`);
       return res.data;
     },
     keepPreviousData: true,
@@ -72,7 +80,9 @@ const PokemonPage: React.FC = () => {
     pokemon.korean_name.includes(searchTerm)
   );
 
-  const displayPokemons = searchTerm ? filteredPokemons : paginatedData?.data ?? [];
+  const displayPokemons = searchTerm
+    ? filteredPokemons
+    : paginatedData?.data ?? [];
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -81,7 +91,7 @@ const PokemonPage: React.FC = () => {
         {isFetching && <Loading />}
         {displayPokemons.length > 0 ? (
           <ul className="flex flex-wrap gap-6 max-w-[90%]">
-            {displayPokemons.map((item) => (
+            {displayPokemons.map((item: any) => (
               <li
                 key={item.id}
                 className="relative flex flex-col items-center p-4 bg-white border-2 border-solid border-gray-200 rounded-lg shadow-md hover:shadow-lg"
@@ -93,7 +103,7 @@ const PokemonPage: React.FC = () => {
                     <Image
                       src={item.sprites.front_default}
                       alt={item.name}
-                      layout="fill"
+                      fill
                       objectFit="contain"
                     />
                   </div>

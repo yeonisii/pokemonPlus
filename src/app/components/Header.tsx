@@ -97,6 +97,12 @@ const HeaderComponent: React.FC = () => {
     }
   };
 
+  const goToMyPage = () => {
+    if (isClient) {
+      router.push("/myPage");
+    }
+  };
+
   return (
     <Header>
       <LogoContainer onClick={goToList}>
