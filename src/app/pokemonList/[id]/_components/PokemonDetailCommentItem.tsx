@@ -1,6 +1,7 @@
 "use client";
 
-import React from "react";
+import { deleteComment } from "@/utils/supabase";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface Comment {
   comment: string;
@@ -24,16 +25,45 @@ const PokemonDetailCommentItem = ({
   comment,
   index,
 }: PokemonDetailCommentItemProps) => {
-  // TODO CSS 할 것...
-  if (comment === null) {
-    return <div> 댓글이 없어용 </div>;
-  }
+  const queryClient = useQueryClient();
 
   console.log(id);
   console.log(index % 2);
   console.log(comment);
+  console.log(comment?.created_at);
+
+  const originalDateStr: string | undefined = comment?.created_at;
+
+  // Date 객체로 변환
+  const dateObj = new Date(originalDateStr);
+
+  // 원하는 형식으로 변환
+  const formattedDate = dateObj.toISOString().slice(0, 16).replace("T", " ");
+
+  console.log(formattedDate);
 
   // TODO created_at 날짜 수정하기!
+
+  // TODO userId 확인 쥬스탠드 해야 할 듯...
+  // const deleteMutation = useMutation({
+  //   mutationFn: deleteComment,
+  //   onSuccess: () => {
+  //     // TODO 토스티파이로 바꾸기 토스티파이 컨펌 있을라나
+  //     queryClient.invalidateQueries({ queryKey: ["Allcomments", id] });
+  //     alert("댓글이 삭제되었습니다.");
+  //   },
+  // });
+
+  // const removeComment = () => {
+  //   deleteMutation.mutate(userId);
+  // };
+
+  // TODO userId 확인 쥬스탠드로 확인 하고 수정 버튼 누를 수 있게끔 하기. user 정보랑 comment.user_id랑 비교
+
+  // TODO CSS 할 것...
+  if (comment === null) {
+    return <div> 댓글이 없어용 </div>;
+  }
 
   return (
     <div className="border-t-2 w-5/6 flex mx-auto flex-col">

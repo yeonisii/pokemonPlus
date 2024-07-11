@@ -53,8 +53,11 @@ export const updateComment = async (updateComment, id) => {
 };
 
 //댓글 삭제
-export const deleteComment = async (id) => {
-  const { error } = await supabase.from("comments").delete().eq("user_id", id);
+export const deleteComment = async (userId) => {
+  const { error } = await supabase
+    .from("comments")
+    .delete()
+    .eq("user_id", userId);
 
   if (error) {
     console.log("삭제 에러", error);
