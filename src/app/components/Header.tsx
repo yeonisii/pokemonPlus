@@ -118,7 +118,7 @@ const HeaderComponent: React.FC = () => {
           <Image src={searchicon} alt="Search Icon" width={24} height={24} />
         </SearchButton>
       </SearchContainer>
-      <UserContainer>
+      <UserContainer onClick={goToMyPage}>
         <UserIconWrapper>
           <Image src={usericon} alt="User Icon" width={40} height={40} />
         </UserIconWrapper>
