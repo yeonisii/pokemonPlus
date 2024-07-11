@@ -5,6 +5,7 @@ import type { Pokemon, EvolutionDetail } from "@/types/type.pokemon";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Image from "next/image";
+import Link from "next/link";
 import React, { useState, useEffect, useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
