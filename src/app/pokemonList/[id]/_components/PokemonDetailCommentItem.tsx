@@ -34,13 +34,13 @@ const PokemonDetailCommentItem = ({
 
   const originalDateStr: string | undefined = comment?.created_at;
 
-  // Date 객체로 변환
-  const dateObj = new Date(originalDateStr);
+  // // Date 객체로 변환
+  // const dateObj = new Date(originalDateStr);
 
-  // 원하는 형식으로 변환
-  const formattedDate = dateObj.toISOString().slice(0, 16).replace("T", " ");
+  // // 원하는 형식으로 변환
+  // const formattedDate = dateObj.toISOString().slice(0, 16).replace("T", " ");
 
-  console.log(formattedDate);
+  // console.log(formattedDate);
 
   // TODO created_at 날짜 수정하기!
 
