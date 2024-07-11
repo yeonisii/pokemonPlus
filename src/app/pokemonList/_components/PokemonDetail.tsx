@@ -64,7 +64,6 @@ export const PokemonDetail = ({ id }: { id: string }) => {
         style={{
           backgroundImage: `url(${detail_bg.src})`,
           backgroundSize: "cover",
-          backgroundPosition: "center",
         }}
       >
         <div className="info mb-4 text-center">
