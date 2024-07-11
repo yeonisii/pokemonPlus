@@ -11,6 +11,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/effect-cards";
 import { EffectCards } from "swiper/modules";
+import detail_bg from "@/app/img/detail_bg.png";
 
 export const PokemonDetail = ({ id }: { id: string }) => {
   const {
@@ -59,8 +60,18 @@ export const PokemonDetail = ({ id }: { id: string }) => {
     const displayedMoves = showAllMoves ? moves : moves.slice(0, 15);
 
     return (
-      <div className="pokemon-details bg-white text-black p-8 rounded-lg mx-auto shadow-lg max-w-xl">
-        <h2 className="text-3xl font-bold mb-6 text-center">
+      <div
+        className="pokemon-details bg-white text-black p-8 rounded-lg mx-auto shadow-lg max-w-xl"
+        style={{
+          backgroundImage: `url(${detail_bg.src})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
+        <div className="info mb-4 text-center">
+          No. <span className="font-bold">{pokeData.id}</span>
+        </div>
+        <h2 className="text-3xl font-bold mb-4 text-center">
           {pokeData.korean_name}
         </h2>
         <div className="flex justify-center mb-6">
@@ -70,19 +81,14 @@ export const PokemonDetail = ({ id }: { id: string }) => {
               (pokeData as Pokemon).sprites.front_default
             }
             alt={pokeData.korean_name}
-            width={150}
-            height={150}
+            width={170}
+            height={170}
           />
         </div>
         <div className="mb-2 text-gray-700 text-center">
           {pokeData.description}
         </div>
-        <div className="info mb-4 text-center">
-          No. <span className="font-bold">{pokeData.id}</span>
-        </div>
-        <div className="info mb-4 text-center">
-          <span className="font-bold">이름: </span> {pokeData.korean_name}
-        </div>
+
         <div className="info mb-4 text-center">
           <span className="font-bold">키: </span> {pokeData.height / 10} m{" "}
           <span className="font-bold">무게: </span> {pokeData.weight / 10} kg
@@ -120,12 +126,14 @@ export const PokemonDetail = ({ id }: { id: string }) => {
             ))}
           </div>
           {moves.length > 15 && (
-            <button
-              onClick={() => setShowAllMoves(!showAllMoves)}
-              className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
-            >
-              {showAllMoves ? "간단히 보기" : "더보기"}
-            </button>
+            <div className="flex justify-center items-center mt-4">
+              <button
+                onClick={() => setShowAllMoves(!showAllMoves)}
+                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700 transition-colors"
+              >
+                {showAllMoves ? "간단히 보기" : "더보기"}
+              </button>
+            </div>
           )}
         </div>
       </div>
@@ -153,13 +161,7 @@ export const PokemonDetail = ({ id }: { id: string }) => {
           </SwiperSlide>
         ))}
       </Swiper>
-      <div className="text-center mt-8">
-        <Link href="/pokemonList">
-          <button className="back-button inline-block bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors">
-            뒤로 가기
-          </button>
-        </Link>
-      </div>
+      <div className="text-center mt-8"></div>
     </div>
   );
 };
