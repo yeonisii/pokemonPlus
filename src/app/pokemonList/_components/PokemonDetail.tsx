@@ -5,7 +5,6 @@ import type { Pokemon, EvolutionDetail } from "@/types/type.pokemon";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Image from "next/image";
-import Link from "next/link";
 import React, { useState, useEffect, useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -61,7 +60,7 @@ export const PokemonDetail = ({ id }: { id: string }) => {
 
     return (
       <div
-        className="pokemon-details bg-white text-black p-8 rounded-lg mx-auto shadow-lg max-w-xl"
+        className="pokemon-details bg-white text-black p-8 "
         style={{
           backgroundImage: `url(${detail_bg.src})`,
           backgroundSize: "cover",
@@ -156,7 +155,7 @@ export const PokemonDetail = ({ id }: { id: string }) => {
         initialSlide={initialSlide} // 초기 슬라이드를 설정
       >
         {pokemon.evolutionChain.map((evolution, index) => (
-          <SwiperSlide key={index}>
+          <SwiperSlide key={index} className="swiper-custom-slide"> {/* 커스텀 클래스 추가 */}
             {createSlide(evolution as EvolutionDetail)}
           </SwiperSlide>
         ))}
