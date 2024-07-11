@@ -2,6 +2,7 @@
 
 import { deleteComment } from "@/utils/supabase";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "react-toastify";
 
 interface Comment {
   comment: string;
@@ -30,27 +31,26 @@ const PokemonDetailCommentItem = ({
   console.log(id);
   console.log(index % 2);
   console.log(comment);
-  console.log(comment?.created_at);
 
-  const originalDateStr: string | undefined = comment?.created_at;
+  const commentSupabaseDate: string | undefined = comment?.created_at;
+  const commentDate = commentSupabaseDate?.slice(0, 16).replace("T", " ");
 
-  // // Date 객체로 변환
-  // const dateObj = new Date(originalDateStr);
-
-  // // 원하는 형식으로 변환
-  // const formattedDate = dateObj.toISOString().slice(0, 16).replace("T", " ");
-
-  // console.log(formattedDate);
-
-  // TODO created_at 날짜 수정하기!
-
-  // TODO userId 확인 쥬스탠드 해야 할 듯...
+  // TODO userId 확인
   // const deleteMutation = useMutation({
   //   mutationFn: deleteComment,
   //   onSuccess: () => {
-  //     // TODO 토스티파이로 바꾸기 토스티파이 컨펌 있을라나
   //     queryClient.invalidateQueries({ queryKey: ["Allcomments", id] });
-  //     alert("댓글이 삭제되었습니다.");
+  //  toast("🦄 댓글이 삭제되었습니다!", {
+  //   position: "top-right",
+  //   autoClose: 5000,
+  //   hideProgressBar: false,
+  //   closeOnClick: true,
+  //   pauseOnHover: true,
+  //   draggable: true,
+  //   progress: undefined,
+  //   theme: "light",
+  //   transition: Bounce,
+  // });
   //   },
   // });
 
@@ -76,7 +76,7 @@ const PokemonDetailCommentItem = ({
             <div className="flex flex-col gap-2">
               <div className="flex justify-between px-2">
                 <div>닉네임</div>
-                <div>{comment?.created_at}</div>
+                <div>{commentDate}</div>
               </div>
               <div className="p-2 border-2">{comment?.comment}</div>
             </div>
@@ -97,7 +97,9 @@ const PokemonDetailCommentItem = ({
               : "left-[-12%] rotate-[270deg]"
           }`}
           viewBox="0 0 100 100"
-        />
+        >
+          <polygon points="25,0 50,50 0,50" />
+        </svg>
       </div>
 
       {/* 예시! 한 개 더 보일 때는 말꼬리를 반대로... */}

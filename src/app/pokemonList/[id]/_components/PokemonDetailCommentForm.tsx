@@ -4,6 +4,8 @@ import { addComment } from "@/utils/supabase";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { MdOutlineCatchingPokemon } from "react-icons/md";
+import { Bounce, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const PokemonDetailCommentForm = ({ id }: { id: string }) => {
   // TODO formData로 바꾸기
@@ -20,10 +22,19 @@ const PokemonDetailCommentForm = ({ id }: { id: string }) => {
         comment: string;
       }) => addComment(newComment),
     onSuccess: () => {
-      // TODO 토스티파이로 바꾸기
       queryClient.invalidateQueries({ queryKey: ["Allcomments", id] });
-      alert("댓글 작성이 완료되었습니다.");
       setComment("");
+      toast("🦄 댓글이 작성되었습니다!", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
     },
   });
 
