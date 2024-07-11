@@ -20,7 +20,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
         <HeaderComponent />
-        <Providers>{children} </Providers>
+        <Providers>{children}</Providers>
         <FooterComponent />
       </body>
     </html>
