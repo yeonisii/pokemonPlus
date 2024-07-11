@@ -61,11 +61,10 @@ export const PokemonDetail = ({ id }: { id: string }) => {
 
     return (
       <div
-        className="pokemon-details bg-white text-black p-8 rounded-lg mx-auto shadow-lg max-w-xl"
+        className="pokemon-details bg-white text-black p-8 rounded-2xl mx-auto border-8 border-gray-300" // 테두리 추가
         style={{
           backgroundImage: `url(${detail_bg.src})`,
           backgroundSize: "cover",
-          backgroundPosition: "center",
         }}
       >
         <div className="info mb-4 text-center">
@@ -114,7 +113,6 @@ export const PokemonDetail = ({ id }: { id: string }) => {
           ))}
         </div>
         <div className="description text-sm mb-6">
-          <span className="font-bold">기술:</span>
           <div className="flex flex-wrap justify-center mt-2">
             {displayedMoves.map((moveInfo, index) => (
               <span
@@ -156,7 +154,7 @@ export const PokemonDetail = ({ id }: { id: string }) => {
         initialSlide={initialSlide} // 초기 슬라이드를 설정
       >
         {pokemon.evolutionChain.map((evolution, index) => (
-          <SwiperSlide key={index}>
+          <SwiperSlide key={index} className="swiper-custom-slide"> {/* 커스텀 클래스 추가 */}
             {createSlide(evolution as EvolutionDetail)}
           </SwiperSlide>
         ))}
