@@ -7,10 +7,10 @@ import "react-toastify/dist/ReactToastify.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export const metadata: Metadata = {
-  title: "My Pokemon Book",
-  description: "나만의 포켓몬 도감!",
-};
+//export const metadata: Metadata = {
+//  title: "My Pokemon Book",
+//  description: "나만의 포켓몬 도감!",
+//};
 
 export default function RootLayout({
   children,
@@ -18,7 +18,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
         <ToastContainer />
         <Providers>{children}</Providers>
