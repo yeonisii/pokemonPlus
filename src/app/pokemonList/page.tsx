@@ -1,6 +1,10 @@
 "use client";
 
-import { useQuery, QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+  useQuery,
+  QueryClient,
+  QueryClientProvider,
+} from "@tanstack/react-query";
 import axios from "axios";
 import React, { useState, useEffect, ChangeEvent } from "react";
 import type { Pokemon } from "@/types/type.pokemon";
@@ -18,7 +22,11 @@ const ITEMS_PER_PAGE: number = 20;
 const queryClient = new QueryClient();
 
 const fetchPaginatedPokemons = async (page: number) => {
-  const res = await axios.get<{ data: Pokemon[]; hasNextPage: boolean; totalPages: number }>(`/api/pokemons?page=${page}`);
+  const res = await axios.get<{
+    data: Pokemon[];
+    hasNextPage: boolean;
+    totalPages: number;
+  }>(`/api/pokemons?page=${page}`);
   return res.data;
 };
 
@@ -28,18 +36,15 @@ const PokemonPage: React.FC = () => {
   const [allPokemons, setAllPokemons] = useState<Pokemon[]>([]); // 전체 포켓몬 데이터 상태 값
   const searchTerm = useSearchStore((state) => state.searchTerm); // 전역상태 검색 값
 
-
-
-  useEffect( () => {
-
+  useEffect(() => {
     const testFn = async () => {
-      const cookie = await getUserCookie();  
-      console.log(cookie);
-    }
+      const cookie = await getUserCookie();
+      if (cookie) {
+        console.log(JSON.parse(cookie));
+      }
+    };
     testFn();
-   
-  }, [])
-    
+  }, []);
 
   // 전체 데이터를 가져오는 함수
   const fetchAllPokemons = async () => {
@@ -54,20 +59,36 @@ const PokemonPage: React.FC = () => {
   };
 
   useEffect(() => {
+    const fetchLikedPokemons = async () => {
+      try {
+        const response = await axios.get("/api/likes");
+        if (response.data.success) {
+          setLikedPokemons(response.data.likedPokemonIds);
+        }
+      } catch (error) {
+        console.error("좋아요 목록 가져오기 오류:", error);
+      }
+    };
+    fetchLikedPokemons();
     fetchAllPokemons(); // 컴포넌트가 마운트될 때 전체 데이터 한 번 가져오기
   }, []);
 
   // 페이지네이션 기능
-  const { data: paginatedData, isFetching, error } = useQuery({
+  const {
+    data: paginatedData,
+    isFetching,
+    error,
+  } = useQuery({
     queryKey: ["pokemons", page],
 
     queryFn: async () => {
-      const res = await axios.get<{ data: Pokemon[]; hasNextPage: boolean; totalPages: number }>(
-        `/api/pokemons?page=${page}`
-      );
+      const res = await axios.get<{
+        data: Pokemon[];
+        hasNextPage: boolean;
+        totalPages: number;
+      }>(`/api/pokemons?page=${page}`);
       return res.data;
     },
-
   });
 
   if (isFetching && !paginatedData) {
@@ -81,12 +102,18 @@ const PokemonPage: React.FC = () => {
   const totalPages: number = paginatedData?.totalPages ?? 0;
 
   // 좋아요 기능
-  const toggleLike = (pokemonId: number) => {
-
-    if (likedPokemons.includes(pokemonId)) {
-      setLikedPokemons(likedPokemons.filter((id) => id !== pokemonId));
-    } else {
-      setLikedPokemons([...likedPokemons, pokemonId]);
+  const toggleLike = async (pokemonId: number) => {
+    try {
+      const response = await axios.post("/api/likes", { pokemonId });
+      if (response.data.success) {
+        setLikedPokemons((prev) =>
+          prev.includes(pokemonId)
+            ? prev.filter((id) => id !== pokemonId)
+            : [...prev, pokemonId]
+        );
+      }
+    } catch (error) {
+      console.error("좋아요 토글 오류:", error);
     }
   };
 
@@ -95,7 +122,9 @@ const PokemonPage: React.FC = () => {
     pokemon.korean_name.includes(searchTerm)
   );
 
-  const displayPokemons = searchTerm ? filteredPokemons : paginatedData?.data ?? [];
+  const displayPokemons = searchTerm
+    ? filteredPokemons
+    : paginatedData?.data ?? [];
 
   return (
     <QueryClientProvider client={queryClient}>
