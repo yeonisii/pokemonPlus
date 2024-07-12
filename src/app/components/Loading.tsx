@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import gif from "../img/Animation2.gif";
+import gif from "../img/animation2.gif";
 import styled from "styled-components";
 
 const LoadingWrapper = styled.div`
