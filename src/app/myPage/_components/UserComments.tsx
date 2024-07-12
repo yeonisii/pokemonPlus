@@ -5,6 +5,7 @@ import React from "react";
 
 const UserComments = () => {
   const { nickname, comments } = useMypage();
+
   return (
     <div className="mt-9">
       <h2 className="text-2xl font-bold m-5">{nickname} 님이 작성한 댓글</h2>

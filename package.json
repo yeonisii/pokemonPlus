@@ -26,6 +26,7 @@
     "react-toastify": "^10.0.5",
     "sharp": "^0.33.4",
     "styled-components": "^6.1.11",
+    "supabase": "^1.183.5",
     "swiper": "^11.1.4",
     "zustand": "^4.5.4"
   },
