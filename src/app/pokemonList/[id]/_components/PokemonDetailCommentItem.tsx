@@ -118,32 +118,22 @@ const PokemonDetailCommentItem = ({
   });
 
   const removeComment = () => {
-    deleteMutation.mutate(myId);
+    deleteMutation.mutate({ row: comment?.row, userId: myId });
   };
 
   const OnClickEditBtn = () => {
     setIsEditing(true);
   };
 
-  console.log(comment?.user_id);
-  console.log(myId);
-
-  // const editMutation = useMutation({
-  //   mutationFn: (
-  //     comment,
-  //     userId: {
-  //       // TODO 여기 두 개 받아오면 어떻게 타입 쓰는지 정리!
-  //       editComment;
-  //     }
-  //   ) => updateComment(comment, userId),
-  //   onSuccess: () => {
-  //     queryClient.invalidateQueries({ queryKey: ["Allcomments", id] });
-  //   },
-  // });
+  const editMutation = useMutation({
+    mutationFn: updateComment,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["Allcomments", id] });
+    },
+  });
 
   const handleSaveButton = () => {
-    // TODO : id 받아와서 바꾸기
-    // editMutation.mutate(editComment, myId)
+    editMutation.mutate({ comment: editComment, id: myId, row: comment?.row });
     setIsEditing(false);
     toast("🦄 댓글이 수정되었습니다!", {
       position: "top-right",
@@ -176,7 +166,6 @@ const PokemonDetailCommentItem = ({
             </div>
             <div className="flex flex-col gap-2">
               <div className="flex justify-between px-2">
-                {/* TODO 닉네임으로 바꾸기 */}
                 <div className="mr-8">{comment.nickname}</div>
                 <div>{commentDate}</div>
               </div>
