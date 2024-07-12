@@ -1,4 +1,6 @@
 import { PokemonDetail } from "../_components/PokemonDetail";
+import PokemonDetailCommentForm from "./_components/PokemonDetailCommentForm";
+import PokemonDetailCommentList from "./_components/PokemonDetailCommentList";
 
 type Props = {
   params: { id: string };
@@ -18,13 +20,22 @@ export async function generateMetadata({ params: { id } }: Props) {
     console.error("Error generating metadata:", error); // 에러 로그 개선
     return {
       title: "Pokemon",
-      description: "포켓몬 상세 정보"
+      description: "포켓몬 상세 정보",
     };
   }
 }
 
 const PokemonDetailPage = ({ params: { id } }: { params: { id: string } }) => {
-  return <PokemonDetail id={id} />; // 불필요한 Fragment 제거
+  console.log(id);
+  return (
+    <>
+      <PokemonDetail id={id} />
+      <div className="bg-gray-300 h-[100vh] p-4 w-2/3 mx-auto">
+        <PokemonDetailCommentForm id={id} />
+        <PokemonDetailCommentList id={id} />
+      </div>
+    </>
+  );
 };
 
 export default PokemonDetailPage;

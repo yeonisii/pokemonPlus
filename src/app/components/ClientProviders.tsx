@@ -1,7 +1,7 @@
 "use client";
 
+import Providers from "@/queryClient/QueryClient";
 import { useEffect, useState } from "react";
-import Providers from "../queryClient/QueryClient";
 
 const ClientProviders = ({ children }: { children: React.ReactNode }) => {
   const [isClient, setIsClient] = useState(false);

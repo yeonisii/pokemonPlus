@@ -48,6 +48,7 @@ const SearchButton = styled.button`
   cursor: pointer;
   display: flex;
   align-items: center;
+  justify-content: center;
 `;
 
 const UserContainer = styled.div`
@@ -106,7 +107,7 @@ const HeaderComponent: React.FC = () => {
   return (
     <Header>
       <LogoContainer onClick={goToList}>
-        <Image src={logo} alt="Pokemon Logo" width={160} height={82} />
+        <Image src={logo} alt="Pokemon Logo" width={160} height={82} style={{ width: "auto", height: "auto" }} />
       </LogoContainer>
       <SearchContainer>
         <SearchInput
@@ -115,12 +116,12 @@ const HeaderComponent: React.FC = () => {
           onChange={handleSearch}
         />
         <SearchButton>
-          <Image src={searchicon} alt="Search Icon" width={24} height={24} />
+          <Image src={searchicon} alt="Search Icon" width={24} height={24} style={{ width: "auto", height: "auto" }} />
         </SearchButton>
       </SearchContainer>
       <UserContainer onClick={goToMyPage}>
         <UserIconWrapper>
-          <Image src={usericon} alt="User Icon" width={40} height={40} />
+          <Image src={usericon} alt="User Icon" width={40} height={40} style={{ width: "auto", height: "auto" }} />
         </UserIconWrapper>
         <Divider />
         <SignUpButton>Sign up</SignUpButton>

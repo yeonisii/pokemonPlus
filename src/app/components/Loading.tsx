@@ -35,7 +35,7 @@ const Loading = () => {
 
   return (
     <LoadingWrapper>
-      <Image src={gif} alt="Loading..." />
+      <Image src={gif} alt="Loading..." priority={true} />
     </LoadingWrapper>
   );
 };
