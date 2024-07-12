@@ -1,4 +1,4 @@
-"use client"; // 이 줄을 추가하여 컴포넌트를 클라이언트 컴포넌트로 명시합니다.
+"use client";
 
 import Loading from "@/app/components/Loading";
 import type { Pokemon, EvolutionDetail } from "@/types/type.pokemon";
@@ -61,12 +61,11 @@ export const PokemonDetail = ({ id }: { id: string }) => {
 
     return (
       <div
-      className="pokemon-details bg-white text-black p-8 rounded-2xl mx-auto border-8 border-gray-300" // 테두리 추가
-      style={{
+        className="pokemon-details bg-white text-black p-8 rounded-2xl mx-auto border-8 border-gray-300"
+        style={{
           backgroundImage: `url(${detail_bg.src})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
-          // fixed나 sticky 포지션을 사용하지 않도록 주의
         }}
       >
         <div className="info mb-4 text-center">
@@ -116,7 +115,6 @@ export const PokemonDetail = ({ id }: { id: string }) => {
           ))}
         </div>
         <div className="description text-sm mb-6">
-          <span className="font-bold">기술:</span>
           <div className="flex flex-wrap justify-center mt-2">
             {displayedMoves.map((moveInfo, index) => (
               <span
@@ -129,12 +127,12 @@ export const PokemonDetail = ({ id }: { id: string }) => {
           </div>
           {moves.length > 15 && (
             <div className="text-center mt-8">
-             <button 
-             onClick={() => setShowAllMoves(!showAllMoves)}
-             className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-700 transition-colors"
-           >
-              {showAllMoves ? "간단히 보기" : "더보기"}
-            </button>
+              <button
+                onClick={() => setShowAllMoves(!showAllMoves)}
+                className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-700 transition-colors"
+              >
+                {showAllMoves ? "간단히 보기" : "더보기"}
+              </button>
             </div>
           )}
         </div>
@@ -159,12 +157,13 @@ export const PokemonDetail = ({ id }: { id: string }) => {
       >
         {pokemon.evolutionChain.map((evolution, index) => (
           <SwiperSlide key={index}>
-            {createSlide(evolution as EvolutionDetail)}
+            <Link href={`/pokemonList/${evolution.id}`} scroll={false}>
+              {createSlide(evolution as EvolutionDetail)}
+            </Link>
           </SwiperSlide>
         ))}
       </Swiper>
-      <div className="text-center mt-8">
-      </div>
+      <div className="text-center mt-8"></div>
     </div>
   );
 };

@@ -3,7 +3,7 @@ import Link from "next/link";
 export default function Home() {
   return (
     <main className="flex justify-center items-center h-screen">
-      <Link href="/pokemonList">
+      <Link href="/pokemonList" scroll={false}>
         <h1 className="m-4 p-4 border-4 border-dotted border-red-400 rounded-xl hover:shadow-md">
           <span>포</span>
           <span className="text-red-600">켓</span>

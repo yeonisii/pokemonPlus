@@ -1,12 +1,13 @@
 "use client";
+
 import { useQuery, QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import type { Pokemon } from "@/types/type.pokemon";
 import Link from "next/link";
 import Image from "next/image";
-import Loading from "../components/Loading";
-import Pagination from "../components/Pagination";
+import Loading from "@/app/components/Loading";
+import Pagination from "@/app/components/Pagination";
 import onLike from "../../../public/full_love.svg";
 import offLike from "../../../public/bin_love.svg";
 import { useSearchStore } from "@/zustand/useSearchStore";
@@ -85,9 +86,9 @@ const PokemonPage: React.FC = () => {
                 <li
                   key={item.id}
                   className="relative flex flex-col items-center p-4 bg-white border-2 border-solid border-gray-200 rounded-lg shadow-md hover:shadow-lg"
-                  style={{ maxWidth: "200px" }}
+                  style={{ maxWidth: "200px", position: "relative" }}
                 >
-                  <Link href={`/pokemonList/${item.id}`}>
+                  <Link href={`/pokemonList/${item.id}`} scroll={false}>
                     <div className="text-lg font-bold mb-2">No. {item.id}</div>
                     <div className="relative w-32 h-32 mb-2">
                       <Image
