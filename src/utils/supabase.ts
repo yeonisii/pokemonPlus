@@ -38,10 +38,10 @@ export const addComment = async (newComment) => {
 };
 
 //댓글 수정
-export const updateComment = async (updateComment, id) => {
+export const updateComment = async (comment, id) => {
   const { data, error } = await supabase
     .from("comments")
-    .update(updateComment)
+    .update({ comment })
     .eq("user_id", id)
     .select();
 
