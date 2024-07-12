@@ -19,8 +19,6 @@ import { getUserCookie } from "../actions/cookie";
 
 const ITEMS_PER_PAGE: number = 20;
 
-const queryClient = new QueryClient();
-
 const fetchPaginatedPokemons = async (page: number) => {
   const res = await axios.get<{
     data: Pokemon[];
@@ -35,14 +33,6 @@ const PokemonPage: React.FC = () => {
   const [likedPokemons, setLikedPokemons] = useState<number[]>([]); // 좋아요 상태 값
   const [allPokemons, setAllPokemons] = useState<Pokemon[]>([]); // 전체 포켓몬 데이터 상태 값
   const searchTerm = useSearchStore((state) => state.searchTerm); // 전역상태 검색 값
-
-  useEffect(() => {
-    const testFn = async () => {
-      const cookie = await getUserCookie();
-      console.log(cookie);
-    };
-    testFn();
-  }, []);
 
   // 전체 데이터를 가져오는 함수
   const fetchAllPokemons = async () => {

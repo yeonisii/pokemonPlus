@@ -6,9 +6,7 @@ import { toast } from "react-toastify";
 import { MdOutlineCatchingPokemon } from "react-icons/md";
 import { useEffect, useState } from "react";
 import { createClient } from "@/utils/client";
-import { getCookies } from "cookies-next";
-import { Session } from "inspector";
-import { cookies } from "next/headers";
+import { getUserCookie } from "@/app/actions/cookie";
 
 interface Comment {
   comment: string | null;
@@ -36,13 +34,16 @@ const PokemonDetailCommentItem = ({
     comment?.comment || ""
   );
   const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [myId, setMyId] = useState<string>("");
   const queryClient = useQueryClient();
   const supabase = createClient();
 
-  console.log(comment);
-
   const commentSupabaseDate: string | null | undefined = comment?.created_at;
   const commentDate = commentSupabaseDate?.slice(0, 16).replace("T", " ");
+
+  console.log(myId);
+
+
 
   // TODO userId 확인
   // const deleteMutation = useMutation({
@@ -146,7 +147,7 @@ const PokemonDetailCommentItem = ({
               </div>
             </div>
           </div>
-          {!isEditing && (
+          {myId && !isEditing && (
             <div className="flex gap-2 cursor-pointer whitespace-nowrap p-2">
               <button onClick={OnClickEditBtn}>수정</button>
               <button>삭제</button>
