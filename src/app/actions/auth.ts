@@ -61,7 +61,7 @@ export async function signIn(formData: LoginFormData) {
 
   cookie.set("session", JSON.stringify(session), {
     path: "/",
-    httpOnly: true,
+    httpOnly: false,
     sameSite: "strict",
     maxAge: 60 * 60 * 24 * 7,
   });

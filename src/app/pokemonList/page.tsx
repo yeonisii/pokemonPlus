@@ -24,11 +24,14 @@ const PokemonPage: React.FC = () => {
     try {
       const res = await axios.get<{ data: Pokemon[] }>("/api/pokemons");
       const { data } = res.data;
+
       setAllPokemons(data); // 전체 포켓몬 데이터 상태 업데이트
     } catch (error) {
       console.error("데이터를 불러오는 중 에러가 발생했습니다:", error);
     }
   };
+
+
 
   useEffect(() => {
     fetchAllPokemons(); // 컴포넌트가 마운트될 때 전체 데이터 한 번 가져오기
