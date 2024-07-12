@@ -45,7 +45,6 @@ const PokemonPage: React.FC = () => {
   const { data: paginatedData, isFetching, error } = useQuery({
     queryKey: ["pokemons", page],
     queryFn: () => fetchPaginatedPokemons(page),
-    keepPreviousData: true,
   });
 
   if (isFetching && !paginatedData) {

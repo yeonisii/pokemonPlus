@@ -1,4 +1,4 @@
-"use client";
+"use client"; // 이 줄을 추가하여 컴포넌트를 클라이언트 컴포넌트로 명시합니다.
 
 import Loading from "@/app/components/Loading";
 import type { Pokemon, EvolutionDetail } from "@/types/type.pokemon";
@@ -61,8 +61,8 @@ export const PokemonDetail = ({ id }: { id: string }) => {
 
     return (
       <div
-        className="pokemon-details bg-white text-black p-8 rounded-lg mx-auto shadow-lg max-w-xl"
-        style={{
+      className="pokemon-details bg-white text-black p-8 rounded-2xl mx-auto border-8 border-gray-300" // 테두리 추가
+      style={{
           backgroundImage: `url(${detail_bg.src})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
@@ -128,11 +128,14 @@ export const PokemonDetail = ({ id }: { id: string }) => {
             ))}
           </div>
           {moves.length > 15 && (
-            <button
-              onClick={() => setShowAllMoves(!showAllMoves)}
-              className="back-button inline-block bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors">
+            <div className="text-center mt-8">
+             <button 
+             onClick={() => setShowAllMoves(!showAllMoves)}
+             className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-700 transition-colors"
+           >
               {showAllMoves ? "간단히 보기" : "더보기"}
             </button>
+            </div>
           )}
         </div>
       </div>
