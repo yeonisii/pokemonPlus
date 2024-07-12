@@ -21,9 +21,11 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <ClientProviders>
+  
           <HeaderComponent />
           {children}
           <FooterComponent />
+    
         </ClientProviders>
       </body>
     </html>
