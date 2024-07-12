@@ -44,13 +44,25 @@ const PokemonPage: React.FC = () => {
   }, []);
 
   // 페이지네이션 기능
-  const { data: paginatedData, isFetching, error } = useQuery({
+  const {
+    data: paginatedData,
+    isFetching,
+    error,
+  } = useQuery<{
+    data: Pokemon[];
+    hasNextPage: boolean;
+    totalPages: number;
+  }>({
+
     queryKey: ["pokemons", page],
 
     queryFn: async () => {
-      const res = await axios.get<{ data: Pokemon[]; hasNextPage: boolean; totalPages: number }>(
-        `/api/pokemons?page=${page}`
-      );
+      const res = await axios.get<{
+        data: Pokemon[];
+        hasNextPage: boolean;
+        totalPages: number;
+      }>(`/api/pokemons?page=${page}`);
+
       return res.data;
     },
 
@@ -80,21 +92,40 @@ const PokemonPage: React.FC = () => {
     pokemon.korean_name.includes(searchTerm)
   );
 
-  const displayPokemons = searchTerm ? filteredPokemons : paginatedData?.data ?? [];
+  const displayPokemons = searchTerm
+    ? filteredPokemons
+    : paginatedData?.data ?? [];
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <div className="flex flex-col min-h-screen">
-        <div className="flex-grow flex flex-col items-center my-8">
-          <h1 className="text-3xl text-center font-bold mt-4 mb-8">Pokémon</h1>
-          {isFetching && <Loading />}
-          {displayPokemons.length > 0 ? (
-            <ul className="flex flex-wrap gap-6 max-w-[90%]">
-              {displayPokemons.map((item) => (
-                <li
-                  key={item.id}
-                  className="relative flex flex-col items-center p-4 bg-white border-2 border-solid border-gray-200 rounded-lg shadow-md hover:shadow-lg"
-                  style={{ maxWidth: "200px", position: "relative" }}
+    <div className="flex flex-col min-h-screen">
+      <div className="flex-grow flex flex-col items-center my-8">
+        <h1 className="text-3xl text-center font-bold mt-4 mb-8">Pokémon</h1>
+        {isFetching && <Loading />}
+        {displayPokemons.length > 0 ? (
+          <ul className="flex flex-wrap gap-6 max-w-[90%]">
+            {displayPokemons.map((item: any) => (
+              <li
+                key={item.id}
+                className="relative flex flex-col items-center p-4 bg-white border-2 border-solid border-gray-200 rounded-lg shadow-md hover:shadow-lg"
+                style={{ maxWidth: "200px" }}
+              >
+                <Link href={`/pokemonList/${item.id}`}>
+                  <div className="text-lg font-bold mb-2">No. {item.id}</div>
+                  <div className="relative w-32 h-32 mb-2">
+                    <Image
+                      src={item.sprites.front_default}
+                      alt={item.name}
+                      fill
+                      objectFit="contain"
+                    />
+                  </div>
+                  <div className="text-sm text-center font-bold">
+                    {item.korean_name}
+                  </div>
+                </Link>
+                <button
+                  onClick={() => toggleLike(item.id)}
+                  className="absolute top-2 right-2 p-2 rounded-full bg-gradient-to-br from-pink-400 to-purple-600 focus:outline-none transform hover:scale-105 transition duration-300"
                 >
                   <Link href={`/pokemonList/${item.id}`} scroll={false}>
                     <div className="text-lg font-bold mb-2">No. {item.id}</div>
