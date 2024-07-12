@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { createClient } from "@/utils/client";
 import { getCookies } from "cookies-next";
 import { Session } from "inspector";
+import { cookies } from "next/headers";
 
 interface Comment {
   comment: string | null;
@@ -35,16 +36,10 @@ const PokemonDetailCommentItem = ({
     comment?.comment || ""
   );
   const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [myId, setMyId] = useState<string | null>("" || null);
   const queryClient = useQueryClient();
   const supabase = createClient();
 
   console.log(comment);
-
-  useEffect(() => {
-    const cookies = document.cookie;
-    console.log("Cookies:", cookies);
-  }, []);
 
   const commentSupabaseDate: string | null | undefined = comment?.created_at;
   const commentDate = commentSupabaseDate?.slice(0, 16).replace("T", " ");

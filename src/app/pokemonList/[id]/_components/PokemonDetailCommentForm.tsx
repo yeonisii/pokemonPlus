@@ -8,7 +8,6 @@ import { Bounce, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const PokemonDetailCommentForm = ({ id }: { id: string }) => {
-  // TODO formData로 바꾸기
   const [comment, setComment] = useState("");
   const queryClient = useQueryClient();
 
