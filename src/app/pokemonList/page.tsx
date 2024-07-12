@@ -2,7 +2,7 @@
 
 import { useQuery, QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import axios from "axios";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, ChangeEvent } from "react";
 import type { Pokemon } from "@/types/type.pokemon";
 import Link from "next/link";
 import Image from "next/image";
@@ -32,6 +32,7 @@ const PokemonPage: React.FC = () => {
     try {
       const res = await axios.get<{ data: Pokemon[] }>("/api/pokemons");
       const { data } = res.data;
+
       setAllPokemons(data); // 전체 포켓몬 데이터 상태 업데이트
     } catch (error) {
       console.error("데이터를 불러오는 중 에러가 발생했습니다:", error);
@@ -45,7 +46,14 @@ const PokemonPage: React.FC = () => {
   // 페이지네이션 기능
   const { data: paginatedData, isFetching, error } = useQuery({
     queryKey: ["pokemons", page],
-    queryFn: () => fetchPaginatedPokemons(page),
+
+    queryFn: async () => {
+      const res = await axios.get<{ data: Pokemon[]; hasNextPage: boolean; totalPages: number }>(
+        `/api/pokemons?page=${page}`
+      );
+      return res.data;
+    },
+
   });
 
   if (isFetching && !paginatedData) {
