@@ -1,7 +1,7 @@
 "use client";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, ChangeEvent } from "react";
 import type { Pokemon } from "@/types/type.pokemon";
 import Link from "next/link";
 import Image from "next/image";
@@ -31,8 +31,6 @@ const PokemonPage: React.FC = () => {
     }
   };
 
-
-
   useEffect(() => {
     fetchAllPokemons(); // 컴포넌트가 마운트될 때 전체 데이터 한 번 가져오기
   }, []);
@@ -45,10 +43,11 @@ const PokemonPage: React.FC = () => {
   }>({
     queryKey: ["pokemons", page],
     queryFn: async () => {
-      const res = await axios.get<{ data: Pokemon[]; hasNextPage: boolean; totalPages: number }>(`/api/pokemons?page=${page}`);
+      const res = await axios.get<{ data: Pokemon[]; hasNextPage: boolean; totalPages: number }>(
+        `/api/pokemons?page=${page}`
+      );
       return res.data;
     },
-    keepPreviousData: true,
   });
 
   if (isFetching && !paginatedData) {
