@@ -1,7 +1,8 @@
 "use client";
 
 import { getUserCookie } from "@/app/actions/cookie";
-import { addComment } from "@/utils/supabase";
+import { Tables } from "@/types/supabase.users.types";
+import { addComment, userInfo } from "@/utils/supabase";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -11,32 +12,67 @@ import "react-toastify/dist/ReactToastify.css";
 
 const PokemonDetailCommentForm = ({ id }: { id: string }) => {
   const [comment, setComment] = useState<string>("");
-  const [myLogin, setMyLogin] = useState<string | undefined>("" || undefined);
+  const [myLoginId, setMyLoginId] = useState<string>("");
+  const [userInfor, setUserInfor] = useState<Tables<"users">[]>([]);
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    const checkUserLogin = async () => {
-      const cookieString = await getUserCookie();
+    let isMounted = true;
 
-      if (cookieString) {
-        const cookie = JSON.parse(cookieString);
-        setMyLogin(cookie.user.id);
-      } else {
-        console.log("쿠키가 없습니다.");
+    const checkUserLogin = async () => {
+      try {
+        const cookieString = await getUserCookie();
+
+        if (cookieString && isMounted) {
+          const cookie = JSON.parse(cookieString);
+          setMyLoginId(cookie.user.id);
+        }
+      } catch (error) {
+        if (isMounted) {
+          console.error("쿠키 확인 중 오류 발생:", error);
+        }
       }
     };
     checkUserLogin();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
+  useEffect(() => {
+    let isMounted = true;
+
+    const fetchUserInfo = async () => {
+      if (myLoginId) {
+        try {
+          const userData = await userInfo(myLoginId);
+          if (isMounted) {
+            if (userData && userData.length > 0) {
+              setUserInfor(userData);
+            }
+          }
+        } catch (error) {
+          if (isMounted) {
+            console.error("유저 정보 가져오기 실패:", error);
+          }
+        }
+      }
+    };
+    fetchUserInfo();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [myLoginId]);
+
   const addMutation = useMutation({
-    mutationFn:
-      // TODO 임시 값
-      (newComment: {
-        user_id: null;
-        nickname: null;
-        pokemon_id: string;
-        comment: string;
-      }) => addComment(newComment),
+    mutationFn: (newComment: {
+      user_id: string;
+      nickname: string;
+      pokemon_id: string;
+      comment: string;
+    }) => addComment(newComment),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["Allcomments", id] });
       setComment("");
@@ -58,9 +94,8 @@ const PokemonDetailCommentForm = ({ id }: { id: string }) => {
     event.preventDefault();
 
     const newComment = {
-      // TODO 임시값
-      user_id: null,
-      nickname: null,
+      user_id: myLoginId,
+      nickname: userInfor[0].name,
       pokemon_id: id,
       comment,
     };
@@ -74,7 +109,7 @@ const PokemonDetailCommentForm = ({ id }: { id: string }) => {
         포켓몬에 대해 이야기 나눠보세요{" "}
         <MdOutlineCatchingPokemon className="mt-1" />
       </h1>
-      {myLogin ? (
+      {myLoginId ? (
         <div className="flex justify-center p-4 m-4 border-2 w-5/6 rounded-xl bg-white">
           <form
             className="flex gap-4 w-full items-center"

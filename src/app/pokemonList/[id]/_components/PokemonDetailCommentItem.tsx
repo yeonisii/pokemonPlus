@@ -1,12 +1,13 @@
 "use client";
 
-import { deleteComment, updateComment } from "@/utils/supabase";
+import { deleteComment, updateComment, userInfo } from "@/utils/supabase";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "react-toastify";
+import { Bounce, toast } from "react-toastify";
 import { MdOutlineCatchingPokemon } from "react-icons/md";
 import { useEffect, useState } from "react";
 import { createClient } from "@/utils/client";
 import { getUserCookie } from "@/app/actions/cookie";
+import { Tables } from "@/types/supabase.users.types";
 
 interface Comment {
   comment: string | null;
@@ -35,43 +36,97 @@ const PokemonDetailCommentItem = ({
   );
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [myId, setMyId] = useState<string>("");
+  const [userInform, setUserInform] = useState<Tables<"users">[]>([]);
   const queryClient = useQueryClient();
   const supabase = createClient();
 
   const commentSupabaseDate: string | null | undefined = comment?.created_at;
   const commentDate = commentSupabaseDate?.slice(0, 16).replace("T", " ");
 
-  console.log(myId);
+  useEffect(() => {
+    let isMounted = true;
 
+    const checkUserLogin = async () => {
+      try {
+        const cookieString = await getUserCookie();
 
+        if (cookieString && isMounted) {
+          const cookie = JSON.parse(cookieString);
+          setMyId(cookie.user.id);
+        } else if (isMounted) {
+          console.log("쿠키가 없습니다.");
+        }
+      } catch (error) {
+        if (isMounted) {
+          console.error("쿠키 확인 중 오류 발생:", error);
+        }
+      }
+    };
+    checkUserLogin();
 
-  // TODO userId 확인
-  // const deleteMutation = useMutation({
-  //   mutationFn: deleteComment,
-  //   onSuccess: () => {
-  //     queryClient.invalidateQueries({ queryKey: ["Allcomments", id] });
-  //  toast("🦄 댓글이 삭제되었습니다!", {
-  //   position: "top-right",
-  //   autoClose: 5000,
-  //   hideProgressBar: false,
-  //   closeOnClick: true,
-  //   pauseOnHover: true,
-  //   draggable: true,
-  //   progress: undefined,
-  //   theme: "light",
-  //   transition: Bounce,
-  // });
-  //   },
-  // });
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
-  // const removeComment = () => {
-  //   deleteMutation.mutate(userId);
-  // };
+  useEffect(() => {
+    let isMounted = true;
 
-  // TODO userId 확인 쥬스탠드로 확인 하고 수정 버튼 누를 수 있게끔 하기. user 정보랑 comment.user_id랑 비교 탄스택으로 바꾸기~~~
+    const fetchUserInfo = async () => {
+      if (myId) {
+        try {
+          console.log(myId);
+          const userData = await userInfo(myId);
+          if (isMounted) {
+            console.log("유저 정보:", userData);
+            if (userData && userData.length > 0) {
+              setUserInform(userData);
+            } else {
+              console.log("사용자 정보가 없습니다.");
+            }
+          }
+        } catch (error) {
+          if (isMounted) {
+            console.error("유저 정보 가져오기 실패:", error);
+          }
+        }
+      }
+    };
+    fetchUserInfo();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [myId]);
+
+  const deleteMutation = useMutation({
+    mutationFn: deleteComment,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["Allcomments", id] });
+      toast("🦄 댓글이 삭제되었습니다!", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+    },
+  });
+
+  const removeComment = () => {
+    deleteMutation.mutate(myId);
+  };
+
   const OnClickEditBtn = () => {
     setIsEditing(true);
   };
+
+  console.log(comment?.user_id);
+  console.log(myId);
 
   // const editMutation = useMutation({
   //   mutationFn: (
@@ -88,7 +143,7 @@ const PokemonDetailCommentItem = ({
 
   const handleSaveButton = () => {
     // TODO : id 받아와서 바꾸기
-    // editMutation.mutate(editComment, userId)
+    // editMutation.mutate(editComment, myId)
     setIsEditing(false);
     toast("🦄 댓글이 수정되었습니다!", {
       position: "top-right",
@@ -122,7 +177,7 @@ const PokemonDetailCommentItem = ({
             <div className="flex flex-col gap-2">
               <div className="flex justify-between px-2">
                 {/* TODO 닉네임으로 바꾸기 */}
-                <div className="mr-8">닉네임</div>
+                <div className="mr-8">{comment.nickname}</div>
                 <div>{commentDate}</div>
               </div>
               <div className="p-2 border-2 w-full">
@@ -147,10 +202,10 @@ const PokemonDetailCommentItem = ({
               </div>
             </div>
           </div>
-          {myId && !isEditing && (
+          {myId === comment?.user_id && !isEditing && (
             <div className="flex gap-2 cursor-pointer whitespace-nowrap p-2">
               <button onClick={OnClickEditBtn}>수정</button>
-              <button>삭제</button>
+              <button onClick={removeComment}>삭제</button>
             </div>
           )}
         </div>
