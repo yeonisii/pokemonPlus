@@ -2,8 +2,10 @@
 
 import Link from 'next/link';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import { signIn } from '../actions/auth';
+import { useRouter } from 'next/navigation';
 
-interface LoginFormData {
+export interface LoginFormData {
   email: string;
   password: string;
 }
@@ -13,10 +15,21 @@ const LoginPage: React.FC = () => {
     mode: 'onChange'
   });
 
-  const onSubmit: SubmitHandler<LoginFormData> = (data) => {
-    console.log('로그인 시도', data);
+
+  const router = useRouter();
+  const onSubmit: SubmitHandler<LoginFormData> = async (data) => {
+ 
     if (isValid) {
-      window.alert('로그인에 성공했습니다!');
+      const result = await signIn(data);
+      
+      if(!result.success) {
+        alert(result.error);
+        return;
+      }else {
+        router.replace('/pokemonList');
+        return;
+      }
+      
     }
   };
 
