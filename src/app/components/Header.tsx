@@ -98,6 +98,12 @@ const HeaderComponent: React.FC = () => {
     }
   };
 
+  const goToMyPage = () => {
+    if (isClient) {
+      router.push("/myPage");
+    }
+  };
+
   return (
     <Header>
       <LogoContainer onClick={goToList}>
@@ -113,7 +119,7 @@ const HeaderComponent: React.FC = () => {
           <Image src={searchicon} alt="Search Icon" width={24} height={24} style={{ width: "auto", height: "auto" }} />
         </SearchButton>
       </SearchContainer>
-      <UserContainer>
+      <UserContainer onClick={goToMyPage}>
         <UserIconWrapper>
           <Image src={usericon} alt="User Icon" width={40} height={40} style={{ width: "auto", height: "auto" }} />
         </UserIconWrapper>

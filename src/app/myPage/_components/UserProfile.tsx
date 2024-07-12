@@ -3,6 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import useMypage from "@/zustand/mypageStore";
+import pokeball from "../../img/pokeball1.png";
 
 const UserProfile = () => {
   const { nickname, profileImage } = useMypage();

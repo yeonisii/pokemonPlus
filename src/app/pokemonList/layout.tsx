@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "../globals.css"; 
-import ClientProviders from "../components/ClientProviders"; 
+import "../globals.css";
+import ClientProviders from "../components/ClientProviders";
 import HeaderComponent from "../components/Header";
 import FooterComponent from "../components/Footer";
 
@@ -18,12 +18,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en">
       <body className={inter.className}>
         <ClientProviders>
+  
           <HeaderComponent />
           {children}
           <FooterComponent />
+    
         </ClientProviders>
       </body>
     </html>
