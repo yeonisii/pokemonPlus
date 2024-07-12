@@ -12,11 +12,9 @@ import { Tables } from "@/types/supabase.users.types";
 interface Comment {
   comment: string | null;
   created_at: string | null;
-  // TODO 임시값 수정할 것
   nickname: string | null;
   pokemon_id: number | null;
   row: number | null;
-  // TODO 임시 값 수정할 것
   user_id: string | null;
 }
 
@@ -75,10 +73,8 @@ const PokemonDetailCommentItem = ({
     const fetchUserInfo = async () => {
       if (myId) {
         try {
-          console.log(myId);
           const userData = await userInfo(myId);
           if (isMounted) {
-            console.log("유저 정보:", userData);
             if (userData && userData.length > 0) {
               setUserInform(userData);
             } else {

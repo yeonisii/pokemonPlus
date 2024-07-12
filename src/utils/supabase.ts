@@ -77,6 +77,4 @@ export const deleteComment = async ({ row, userId }) => {
   if (error) {
     console.log("삭제 에러", error);
   }
-
-  return console.log("삭제 성공");
 };
