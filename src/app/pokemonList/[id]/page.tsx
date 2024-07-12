@@ -30,7 +30,7 @@ const PokemonDetailPage = ({ params: { id } }: { params: { id: string } }) => {
   return (
     <>
       <PokemonDetail id={id} />
-      <div className="bg-gray-300 h-[100vh] p-4 w-2/3 mx-auto">
+      <div className="h-[100vh] p-4 w-2/3 mx-auto">
         <PokemonDetailCommentForm id={id} />
         <PokemonDetailCommentList id={id} />
       </div>
