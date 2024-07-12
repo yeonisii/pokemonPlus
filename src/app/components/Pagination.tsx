@@ -6,9 +6,13 @@ interface PaginationProps {
   setPage: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const Pagination: React.FC<PaginationProps> = ({ totalPages, page, setPage }) => {
+const Pagination: React.FC<PaginationProps> = ({
+  totalPages,
+  page,
+  setPage,
+}) => {
   return (
-    <div className="flex justify-center mt-8">
+    <div className="flex justify-center mb-8">
       <button
         onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
         disabled={page === 1}

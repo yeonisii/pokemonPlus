@@ -1,5 +1,4 @@
 /** @type {import('next').NextConfig} */
-// "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/105.png"
 const nextConfig = {
   images: {
     remotePatterns: [

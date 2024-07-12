@@ -1,12 +1,13 @@
 "use client";
 
-import React, { ChangeEvent } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import styled from "styled-components";
 import Image from "next/image";
 import logo from "../img/pokemonlogo_nukki.png";
 import searchicon from "../img/searchicon.png";
 import usericon from "../img/usericon.png";
 import { useSearchStore } from "@/zustand/useSearchStore";
+import { useRouter } from "next/navigation";
 
 const Header = styled.header`
   display: flex;
@@ -79,18 +80,34 @@ const SignUpButton = styled.button`
 
 const HeaderComponent: React.FC = () => {
   const setSearchTerm = useSearchStore((state) => state.setSearchTerm);
+  const router = useRouter();
+  const [isClient, setIsClient] = useState(false);
 
   const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
   };
 
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  const goToList = () => {
+    if (isClient) {
+      router.push("/pokemonList");
+    }
+  };
+
   return (
     <Header>
-      <LogoContainer>
+      <LogoContainer onClick={goToList}>
         <Image src={logo} alt="Pokemon Logo" width={160} height={82} />
       </LogoContainer>
       <SearchContainer>
-        <SearchInput type="text" placeholder="Search..." onChange={handleSearch} />
+        <SearchInput
+          type="text"
+          placeholder="Search..."
+          onChange={handleSearch}
+        />
         <SearchButton>
           <Image src={searchicon} alt="Search Icon" width={24} height={24} />
         </SearchButton>
