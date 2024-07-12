@@ -66,6 +66,7 @@ export const PokemonDetail = ({ id }: { id: string }) => {
           backgroundImage: `url(${detail_bg.src})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
+          // fixed나 sticky 포지션을 사용하지 않도록 주의
         }}
       >
         <div className="info mb-4 text-center">
@@ -83,7 +84,7 @@ export const PokemonDetail = ({ id }: { id: string }) => {
             alt={pokeData.korean_name}
             width={150}
             height={150}
-            sizes="(max-width: 600px) 100px, 150px" // 적절한 크기로 설정
+            sizes="(max-width: 600px) 100px, 150px"
           />
         </div>
         <div className="mb-2 text-gray-700 text-center">
@@ -130,7 +131,6 @@ export const PokemonDetail = ({ id }: { id: string }) => {
             <button
               onClick={() => setShowAllMoves(!showAllMoves)}
               className="back-button inline-block bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors">
-            
               {showAllMoves ? "간단히 보기" : "더보기"}
             </button>
           )}
@@ -152,7 +152,7 @@ export const PokemonDetail = ({ id }: { id: string }) => {
             swiper.slideTo(initialSlide, 0, false);
           }
         }}
-        initialSlide={initialSlide} // 초기 슬라이드를 설정
+        initialSlide={initialSlide}
       >
         {pokemon.evolutionChain.map((evolution, index) => (
           <SwiperSlide key={index}>

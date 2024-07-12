@@ -1,5 +1,5 @@
 "use client";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import type { Pokemon } from "@/types/type.pokemon";
@@ -12,6 +12,13 @@ import offLike from "../../../public/bin_love.svg";
 import { useSearchStore } from "@/zustand/useSearchStore";
 
 const ITEMS_PER_PAGE: number = 20;
+
+const queryClient = new QueryClient();
+
+const fetchPaginatedPokemons = async (page: number) => {
+  const res = await axios.get<{ data: Pokemon[]; hasNextPage: boolean; totalPages: number }>(`/api/pokemons?page=${page}`);
+  return res.data;
+};
 
 const PokemonPage: React.FC = () => {
   const [page, setPage] = useState<number>(1); // 페이지네이션 상태 값
@@ -35,16 +42,9 @@ const PokemonPage: React.FC = () => {
   }, []);
 
   // 페이지네이션 기능
-  const { data: paginatedData, isFetching, error } = useQuery<{
-    data: Pokemon[];
-    hasNextPage: boolean;
-    totalPages: number;
-  }>({
+  const { data: paginatedData, isFetching, error } = useQuery({
     queryKey: ["pokemons", page],
-    queryFn: async () => {
-      const res = await axios.get<{ data: Pokemon[]; hasNextPage: boolean; totalPages: number }>(`/api/pokemons?page=${page}`);
-      return res.data;
-    },
+    queryFn: () => fetchPaginatedPokemons(page),
     keepPreviousData: true,
   });
 
@@ -56,7 +56,7 @@ const PokemonPage: React.FC = () => {
     return <div>에러가 발생했습니다.</div>;
   }
 
-  const totalPages: number = paginatedData ? paginatedData.totalPages : 0;
+  const totalPages: number = paginatedData?.totalPages ?? 0;
 
   // 좋아요 기능
   const toggleLike = (pokemonId: number) => {
@@ -75,69 +75,72 @@ const PokemonPage: React.FC = () => {
   const displayPokemons = searchTerm ? filteredPokemons : paginatedData?.data ?? [];
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <div className="flex-grow flex flex-col items-center my-8">
-        <h1 className="text-3xl text-center font-bold mt-4 mb-8">Pokémon</h1>
-        {isFetching && <Loading />}
-        {displayPokemons.length > 0 ? (
-          <ul className="flex flex-wrap gap-6 max-w-[90%]">
-            {displayPokemons.map((item) => (
-              <li
-                key={item.id}
-                className="relative flex flex-col items-center p-4 bg-white border-2 border-solid border-gray-200 rounded-lg shadow-md hover:shadow-lg"
-                style={{ maxWidth: "200px" }}
-              >
-                <Link href={`/pokemonList/${item.id}`}>
-                  <div className="text-lg font-bold mb-2">No. {item.id}</div>
-                  <div className="relative w-32 h-32 mb-2">
-                    <Image
-                      src={item.sprites.front_default}
-                      alt={item.name}
-                      layout="fill"
-                      objectFit="contain"
-                    />
-                  </div>
-                  <div className="text-sm text-center font-bold">
-                    {item.korean_name}
-                  </div>
-                </Link>
-                <button
-                  onClick={() => toggleLike(item.id)}
-                  className="absolute top-2 right-2 p-2 rounded-full bg-gradient-to-br from-pink-400 to-purple-600 focus:outline-none transform hover:scale-105 transition duration-300"
+    <QueryClientProvider client={queryClient}>
+      <div className="flex flex-col min-h-screen">
+        <div className="flex-grow flex flex-col items-center my-8">
+          <h1 className="text-3xl text-center font-bold mt-4 mb-8">Pokémon</h1>
+          {isFetching && <Loading />}
+          {displayPokemons.length > 0 ? (
+            <ul className="flex flex-wrap gap-6 max-w-[90%]">
+              {displayPokemons.map((item) => (
+                <li
+                  key={item.id}
+                  className="relative flex flex-col items-center p-4 bg-white border-2 border-solid border-gray-200 rounded-lg shadow-md hover:shadow-lg"
+                  style={{ maxWidth: "200px" }}
                 >
-                  {likedPokemons.includes(item.id) ? (
-                    <Image
-                      src={onLike}
-                      alt="좋아요 활성화"
-                      width={30}
-                      height={30}
-                      className="w-6 h-6"
-                    />
-                  ) : (
-                    <Image
-                      src={offLike}
-                      alt="좋아요 비활성화"
-                      width={30}
-                      height={30}
-                      className="w-6 h-6"
-                    />
-                  )}
-                </button>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <div className="flex items-center justify-center flex-grow">
-            <span className="text-2xl font-bold">검색 결과가 없습니다</span>
+                  <Link href={`/pokemonList/${item.id}`}>
+                    <div className="text-lg font-bold mb-2">No. {item.id}</div>
+                    <div className="relative w-32 h-32 mb-2">
+                      <Image
+                        src={item.sprites.front_default}
+                        alt={item.name}
+                        fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        style={{ objectFit: "contain" }}
+                      />
+                    </div>
+                    <div className="text-sm text-center font-bold">
+                      {item.korean_name}
+                    </div>
+                  </Link>
+                  <button
+                    onClick={() => toggleLike(item.id)}
+                    className="absolute top-2 right-2 p-2 rounded-full bg-gradient-to-br from-pink-400 to-purple-600 focus:outline-none transform hover:scale-105 transition duration-300"
+                  >
+                    {likedPokemons.includes(item.id) ? (
+                      <Image
+                        src={onLike}
+                        alt="좋아요 활성화"
+                        width={30}
+                        height={30}
+                        className="w-6 h-6"
+                      />
+                    ) : (
+                      <Image
+                        src={offLike}
+                        alt="좋아요 비활성화"
+                        width={30}
+                        height={30}
+                        className="w-6 h-6"
+                      />
+                    )}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <div className="flex items-center justify-center flex-grow">
+              <span className="text-2xl font-bold">검색 결과가 없습니다</span>
+            </div>
+          )}
+        </div>
+        {!searchTerm && (
+          <div className="w-full flex justify-center">
+            <Pagination totalPages={totalPages} page={page} setPage={setPage} />
           </div>
         )}
       </div>
-      {!searchTerm && (
-        <div className="w-full flex justify-center">
-          <Pagination totalPages={totalPages} page={page} setPage={setPage} />
-        </div>
-      )}
-    </div>
+    </QueryClientProvider>
   );
 };
 
