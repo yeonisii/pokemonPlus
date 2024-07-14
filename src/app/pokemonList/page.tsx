@@ -103,7 +103,7 @@ const PokemonPage: React.FC = () => {
   };
 
   // 필터 기능
-  const filteredPokemons = allPokemons.filter((pokemon) =>
+  const filteredPokemons = allPokemons?.filter((pokemon) =>
     pokemon.korean_name.includes(searchTerm)
   );
 

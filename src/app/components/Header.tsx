@@ -7,7 +7,8 @@ import logo from "../img/pokemonlogo_nukki.png";
 import searchicon from "../img/searchicon.png";
 import usericon from "../img/usericon.png";
 import { useSearchStore } from "@/zustand/useSearchStore";
-import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/zustand/authStore"; // Assuming you have this store to manage authentication
+import { useRouter, usePathname } from "next/navigation"; // Assuming you have a hook for getting the current pathname
 
 const Header = styled.header`
   display: flex;
@@ -20,7 +21,7 @@ const Header = styled.header`
 const LogoContainer = styled.div`
   display: flex;
   align-items: center;
-  height: 60px; 
+  height: 60px;
   cursor: pointer;
 `;
 
@@ -81,7 +82,9 @@ const SignUpButton = styled.button`
 
 const HeaderComponent: React.FC = () => {
   const setSearchTerm = useSearchStore((state) => state.setSearchTerm);
+  const { isAuthenticated } = useAuthStore(); // Get authentication status
   const router = useRouter();
+  const pathname = usePathname(); // Get current pathname
   const [isClient, setIsClient] = useState(false);
 
   const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
@@ -104,6 +107,8 @@ const HeaderComponent: React.FC = () => {
     }
   };
 
+  const isDetailPage = pathname.includes("/pokemonList/");
+
   return (
     <Header>
       <LogoContainer onClick={goToList}>
@@ -112,25 +117,27 @@ const HeaderComponent: React.FC = () => {
           alt="Pokemon Logo"
           layout="intrinsic"
           width={160}
-          height={60} 
+          height={60}
         />
       </LogoContainer>
-      <SearchContainer>
-        <SearchInput
-          type="text"
-          placeholder="Search..."
-          onChange={handleSearch}
-        />
-        <SearchButton>
-          <Image src={searchicon} alt="Search Icon" width={24} height={24} />
-        </SearchButton>
-      </SearchContainer>
+      {!isDetailPage && (
+        <SearchContainer>
+          <SearchInput
+            type="text"
+            placeholder="Search..."
+            onChange={handleSearch}
+          />
+          <SearchButton>
+            <Image src={searchicon} alt="Search Icon" width={24} height={24} />
+          </SearchButton>
+        </SearchContainer>
+      )}
       <UserContainer onClick={goToMyPage}>
         <UserIconWrapper>
           <Image src={usericon} alt="User Icon" width={40} height={40} />
         </UserIconWrapper>
         <Divider />
-        <SignUpButton>Sign up</SignUpButton>
+        {!isAuthenticated && <SignUpButton>Sign up</SignUpButton>}
       </UserContainer>
     </Header>
   );
