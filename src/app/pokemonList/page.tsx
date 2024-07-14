@@ -1,10 +1,5 @@
 "use client";
 
-import {
-  useQuery,
-  QueryClient,
-  QueryClientProvider,
-} from "@tanstack/react-query";
 import axios from "axios";
 import React, { useState, useEffect, ChangeEvent } from "react";
 import type { Pokemon } from "@/types/type.pokemon";
@@ -16,6 +11,7 @@ import onLike from "../../../public/full_love.svg";
 import offLike from "../../../public/bin_love.svg";
 import { useSearchStore } from "@/zustand/useSearchStore";
 import { getUserCookie } from "../actions/cookie";
+import { useQuery } from "@tanstack/react-query";
 
 const ITEMS_PER_PAGE: number = 20;
 
@@ -34,6 +30,14 @@ const PokemonPage: React.FC = () => {
   const [allPokemons, setAllPokemons] = useState<Pokemon[]>([]); // 전체 포켓몬 데이터 상태 값
   const searchTerm = useSearchStore((state) => state.searchTerm); // 전역상태 검색 값
 
+  useEffect(() => {
+    const testFn = async () => {
+      const cookie = await getUserCookie();
+      // console.log(cookie);
+    };
+    testFn();
+  }, []);
+
   // 전체 데이터를 가져오는 함수
   const fetchAllPokemons = async () => {
     try {
@@ -47,6 +51,17 @@ const PokemonPage: React.FC = () => {
   };
 
   useEffect(() => {
+    const fetchLikedPokemons = async () => {
+      try {
+        const response = await axios.get("/api/likes");
+        if (response.data.success) {
+          setLikedPokemons(response.data.likedPokemonIds);
+        }
+      } catch (error) {
+        console.error("좋아요 목록 가져오기 오류:", error);
+      }
+    };
+    fetchLikedPokemons();
     fetchAllPokemons(); // 컴포넌트가 마운트될 때 전체 데이터 한 번 가져오기
   }, []);
 
@@ -55,11 +70,7 @@ const PokemonPage: React.FC = () => {
     data: paginatedData,
     isFetching,
     error,
-  } = useQuery<{
-    data: Pokemon[];
-    hasNextPage: boolean;
-    totalPages: number;
-  }>({
+  } = useQuery({
     queryKey: ["pokemons", page],
 
     queryFn: async () => {
@@ -68,7 +79,6 @@ const PokemonPage: React.FC = () => {
         hasNextPage: boolean;
         totalPages: number;
       }>(`/api/pokemons?page=${page}`);
-
       return res.data;
     },
   });

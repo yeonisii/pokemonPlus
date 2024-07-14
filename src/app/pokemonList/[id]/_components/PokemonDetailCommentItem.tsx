@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { createClient } from "@/utils/client";
 import { getUserCookie } from "@/app/actions/cookie";
 import { Tables } from "@/types/supabase.users.types";
+import Image from "next/image";
 
 interface Comment {
   comment: string | null;
@@ -42,57 +43,34 @@ const PokemonDetailCommentItem = ({
   const commentDate = commentSupabaseDate?.slice(0, 16).replace("T", " ");
 
   useEffect(() => {
-    let isMounted = true;
-
     const checkUserLogin = async () => {
       try {
         const cookieString = await getUserCookie();
 
-        if (cookieString && isMounted) {
+        if (cookieString) {
           const cookie = JSON.parse(cookieString);
           setMyId(cookie.user.id);
-        } else if (isMounted) {
-          console.log("쿠키가 없습니다.");
         }
-      } catch (error) {
-        if (isMounted) {
-          console.error("쿠키 확인 중 오류 발생:", error);
-        }
-      }
+      } catch (error) {}
     };
     checkUserLogin();
-
-    return () => {
-      isMounted = false;
-    };
   }, []);
 
   useEffect(() => {
-    let isMounted = true;
-
     const fetchUserInfo = async () => {
       if (myId) {
         try {
           const userData = await userInfo(myId);
-          if (isMounted) {
-            if (userData && userData.length > 0) {
-              setUserInform(userData);
-            } else {
-              console.log("사용자 정보가 없습니다.");
-            }
+          if (userData && userData.length > 0) {
+            setUserInform(userData);
           }
         } catch (error) {
-          if (isMounted) {
-            console.error("유저 정보 가져오기 실패:", error);
-          }
+          console.error("유저 정보 가져오기 실패:", error);
         }
       }
     };
-    fetchUserInfo();
 
-    return () => {
-      isMounted = false;
-    };
+    fetchUserInfo();
   }, [myId]);
 
   const deleteMutation = useMutation({
@@ -157,15 +135,21 @@ const PokemonDetailCommentItem = ({
       <div className="relative w-full bg-blue-100 shadow-xl rounded-xl my-6 px-2">
         <div className="flex p-4 justify-between w-full">
           <div className="flex items-center gap-2">
-            <div className="min-w-[100px] min-h-[100px] flex items-center justify-center border-2 border-slate-500 rounded-full hidden sm:hidden md:hidden lg:block">
-              이미지
+            <div className="min-w-[100px] min-h-[100px] flex items-center justify-center rounded-full hidden sm:hidden md:hidden lg:block">
+              <Image
+                src="/image/profile-pokemon.png"
+                width={100}
+                height={100}
+                alt="포켓몬볼"
+                className="w-full h-auto"
+              />
             </div>
             <div className="flex flex-col gap-2">
               <div className="flex justify-between px-2">
                 <div className="mr-8">{comment.nickname}</div>
                 <div>{commentDate}</div>
               </div>
-              <div className="p-2 border-2 w-full">
+              <div className="p-2 w-full">
                 {isEditing ? (
                   <div className="flex w-full justify-between">
                     <input

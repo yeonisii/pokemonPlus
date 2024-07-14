@@ -17,53 +17,27 @@ const PokemonDetailCommentForm = ({ id }: { id: string }) => {
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    let isMounted = true;
-
     const checkUserLogin = async () => {
-      try {
-        const cookieString = await getUserCookie();
+      const cookieString = await getUserCookie();
 
-        if (cookieString && isMounted) {
-          const cookie = JSON.parse(cookieString);
-          setMyLoginId(cookie.user.id);
-        }
-      } catch (error) {
-        if (isMounted) {
-          console.error("쿠키 확인 중 오류 발생:", error);
-        }
+      if (cookieString) {
+        const cookie = JSON.parse(cookieString);
+        setMyLoginId(cookie.user.id);
       }
     };
     checkUserLogin();
-
-    return () => {
-      isMounted = false;
-    };
   }, []);
 
   useEffect(() => {
-    let isMounted = true;
-
     const fetchUserInfo = async () => {
       if (myLoginId) {
-        try {
-          const userData = await userInfo(myLoginId);
-          if (isMounted) {
-            if (userData && userData.length > 0) {
-              setUserInfor(userData);
-            }
-          }
-        } catch (error) {
-          if (isMounted) {
-            console.error("유저 정보 가져오기 실패:", error);
-          }
+        const userData = await userInfo(myLoginId);
+        if (userData) {
+          setUserInfor(userData);
         }
       }
     };
     fetchUserInfo();
-
-    return () => {
-      isMounted = false;
-    };
   }, [myLoginId]);
 
   const addMutation = useMutation({
