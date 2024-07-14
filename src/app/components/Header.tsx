@@ -20,7 +20,7 @@ const Header = styled.header`
 const LogoContainer = styled.div`
   display: flex;
   align-items: center;
-  height: 40px;
+  height: 60px; 
   cursor: pointer;
 `;
 
@@ -98,10 +98,22 @@ const HeaderComponent: React.FC = () => {
     }
   };
 
+  const goToMyPage = () => {
+    if (isClient) {
+      router.push("/myPage");
+    }
+  };
+
   return (
     <Header>
       <LogoContainer onClick={goToList}>
-        <Image src={logo} alt="Pokemon Logo" width={160} height={82} style={{ width: "auto", height: "auto" }} />
+        <Image
+          src={logo}
+          alt="Pokemon Logo"
+          layout="intrinsic"
+          width={160}
+          height={60} 
+        />
       </LogoContainer>
       <SearchContainer>
         <SearchInput
@@ -110,12 +122,12 @@ const HeaderComponent: React.FC = () => {
           onChange={handleSearch}
         />
         <SearchButton>
-          <Image src={searchicon} alt="Search Icon" width={24} height={24} style={{ width: "auto", height: "auto" }} />
+          <Image src={searchicon} alt="Search Icon" width={24} height={24} />
         </SearchButton>
       </SearchContainer>
-      <UserContainer>
+      <UserContainer onClick={goToMyPage}>
         <UserIconWrapper>
-          <Image src={usericon} alt="User Icon" width={40} height={40} style={{ width: "auto", height: "auto" }} />
+          <Image src={usericon} alt="User Icon" width={40} height={40} />
         </UserIconWrapper>
         <Divider />
         <SignUpButton>Sign up</SignUpButton>
