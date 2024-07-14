@@ -67,6 +67,35 @@ const PokemonDetailCommentForm = ({ id }: { id: string }) => {
   const submitComment = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    if (comment.trim() === "") {
+      return toast.warn("❗️ 댓글을 입력해주세요!", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+    }
+
+    if (comment.length > 300) {
+      toast.warn("❗️ 댓글은 300자 이내로 작성해주세요!", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+      return;
+    }
+
     const newComment = {
       user_id: myLoginId,
       nickname: userInfor[0].name,
