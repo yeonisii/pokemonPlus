@@ -4,8 +4,21 @@ import { createClient } from "./client";
 
 const supabase = createClient();
 
+// 유저 정보 불러오기
+export const userInfo = async (id: string) => {
+  const { data: users, error } = await supabase
+    .from("users")
+    .select("*")
+    .eq("id", id);
+
+  if (error) {
+    console.log("유저 정보 불러오기 실패", error);
+  }
+  return users;
+};
+
 //댓글 불러오기
-export const allComments = async (id) => {
+export const allComments = async (id: string) => {
   const { data: comments, error } = await supabase
     .from("comments")
     .select("*")
@@ -38,11 +51,12 @@ export const addComment = async (newComment) => {
 };
 
 //댓글 수정
-export const updateComment = async (comment, id) => {
+export const updateComment = async ({ comment, id, row }) => {
   const { data, error } = await supabase
     .from("comments")
     .update({ comment })
     .eq("user_id", id)
+    .eq("row", row)
     .select();
 
   if (error) {
@@ -53,15 +67,14 @@ export const updateComment = async (comment, id) => {
 };
 
 //댓글 삭제
-export const deleteComment = async (userId) => {
+export const deleteComment = async ({ row, userId }) => {
   const { error } = await supabase
     .from("comments")
     .delete()
+    .eq("row", row)
     .eq("user_id", userId);
 
   if (error) {
     console.log("삭제 에러", error);
   }
-
-  return console.log("삭제 성공");
 };

@@ -32,9 +32,9 @@ const PokemonPage: React.FC = () => {
 
   useEffect(() => {
     const testFn = async () => {
-      const cookie = await getUserCookie();  
-      console.log(cookie);
-    }
+      const cookie = await getUserCookie();
+      // console.log(cookie);
+    };
     testFn();
   }, []);
 
@@ -66,13 +66,19 @@ const PokemonPage: React.FC = () => {
   }, []);
 
   // 페이지네이션 기능
-  const { data: paginatedData, isFetching, error } = useQuery({
+  const {
+    data: paginatedData,
+    isFetching,
+    error,
+  } = useQuery({
     queryKey: ["pokemons", page],
 
     queryFn: async () => {
-      const res = await axios.get<{ data: Pokemon[]; hasNextPage: boolean; totalPages: number }>(
-        `/api/pokemons?page=${page}`
-      );
+      const res = await axios.get<{
+        data: Pokemon[];
+        hasNextPage: boolean;
+        totalPages: number;
+      }>(`/api/pokemons?page=${page}`);
       return res.data;
     },
   });
@@ -89,7 +95,6 @@ const PokemonPage: React.FC = () => {
 
   // 좋아요 기능
   const toggleLike = (pokemonId: number) => {
-
     if (likedPokemons.includes(pokemonId)) {
       setLikedPokemons(likedPokemons.filter((id) => id !== pokemonId));
     } else {

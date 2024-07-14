@@ -17,7 +17,6 @@ const PokemonDetailCommentList = ({ id }: { id: string }) => {
 
   return (
     <ul>
-      {/* TODO 댓글 맵으로 뿌리기 */}
       {data ? (
         data.map((comment, index) => (
           <PokemonDetailCommentItem
