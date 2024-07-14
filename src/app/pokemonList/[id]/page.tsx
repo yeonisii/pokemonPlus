@@ -26,7 +26,6 @@ export async function generateMetadata({ params: { id } }: Props) {
 }
 
 const PokemonDetailPage = ({ params: { id } }: { params: { id: string } }) => {
-  console.log(id);
   return (
     <>
       <PokemonDetail id={id} />

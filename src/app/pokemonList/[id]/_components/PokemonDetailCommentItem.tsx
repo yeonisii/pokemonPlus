@@ -1,23 +1,21 @@
 "use client";
 
-import { deleteComment, updateComment } from "@/utils/supabase";
+import { deleteComment, updateComment, userInfo } from "@/utils/supabase";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "react-toastify";
+import { Bounce, toast } from "react-toastify";
 import { MdOutlineCatchingPokemon } from "react-icons/md";
 import { useEffect, useState } from "react";
 import { createClient } from "@/utils/client";
-import { getCookies } from "cookies-next";
-import { Session } from "inspector";
-import { cookies } from "next/headers";
+import { getUserCookie } from "@/app/actions/cookie";
+import { Tables } from "@/types/supabase.users.types";
+import Image from "next/image";
 
 interface Comment {
   comment: string | null;
   created_at: string | null;
-  // TODO 임시값 수정할 것
   nickname: string | null;
   pokemon_id: number | null;
   row: number | null;
-  // TODO 임시 값 수정할 것
   user_id: string | null;
 }
 
@@ -36,58 +34,80 @@ const PokemonDetailCommentItem = ({
     comment?.comment || ""
   );
   const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [myId, setMyId] = useState<string>("");
+  const [userInform, setUserInform] = useState<Tables<"users">[]>([]);
   const queryClient = useQueryClient();
   const supabase = createClient();
-
-  console.log(comment);
 
   const commentSupabaseDate: string | null | undefined = comment?.created_at;
   const commentDate = commentSupabaseDate?.slice(0, 16).replace("T", " ");
 
-  // TODO userId 확인
-  // const deleteMutation = useMutation({
-  //   mutationFn: deleteComment,
-  //   onSuccess: () => {
-  //     queryClient.invalidateQueries({ queryKey: ["Allcomments", id] });
-  //  toast("🦄 댓글이 삭제되었습니다!", {
-  //   position: "top-right",
-  //   autoClose: 5000,
-  //   hideProgressBar: false,
-  //   closeOnClick: true,
-  //   pauseOnHover: true,
-  //   draggable: true,
-  //   progress: undefined,
-  //   theme: "light",
-  //   transition: Bounce,
-  // });
-  //   },
-  // });
+  useEffect(() => {
+    const checkUserLogin = async () => {
+      try {
+        const cookieString = await getUserCookie();
 
-  // const removeComment = () => {
-  //   deleteMutation.mutate(userId);
-  // };
+        if (cookieString) {
+          const cookie = JSON.parse(cookieString);
+          setMyId(cookie.user.id);
+        }
+      } catch (error) {}
+    };
+    checkUserLogin();
+  }, []);
 
-  // TODO userId 확인 쥬스탠드로 확인 하고 수정 버튼 누를 수 있게끔 하기. user 정보랑 comment.user_id랑 비교 탄스택으로 바꾸기~~~
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      if (myId) {
+        try {
+          const userData = await userInfo(myId);
+          if (userData && userData.length > 0) {
+            setUserInform(userData);
+          }
+        } catch (error) {
+          console.error("유저 정보 가져오기 실패:", error);
+        }
+      }
+    };
+
+    fetchUserInfo();
+  }, [myId]);
+
+  const deleteMutation = useMutation({
+    mutationFn: deleteComment,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["Allcomments", id] });
+      toast("🦄 댓글이 삭제되었습니다!", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+    },
+  });
+
+  const removeComment = () => {
+    deleteMutation.mutate({ row: comment?.row, userId: myId });
+  };
+
   const OnClickEditBtn = () => {
     setIsEditing(true);
   };
 
-  // const editMutation = useMutation({
-  //   mutationFn: (
-  //     comment,
-  //     userId: {
-  //       // TODO 여기 두 개 받아오면 어떻게 타입 쓰는지 정리!
-  //       editComment;
-  //     }
-  //   ) => updateComment(comment, userId),
-  //   onSuccess: () => {
-  //     queryClient.invalidateQueries({ queryKey: ["Allcomments", id] });
-  //   },
-  // });
+  const editMutation = useMutation({
+    mutationFn: updateComment,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["Allcomments", id] });
+    },
+  });
 
   const handleSaveButton = () => {
-    // TODO : id 받아와서 바꾸기
-    // editMutation.mutate(editComment, userId)
+    editMutation.mutate({ comment: editComment, id: myId, row: comment?.row });
     setIsEditing(false);
     toast("🦄 댓글이 수정되었습니다!", {
       position: "top-right",
@@ -115,16 +135,21 @@ const PokemonDetailCommentItem = ({
       <div className="relative w-full bg-blue-100 shadow-xl rounded-xl my-6 px-2">
         <div className="flex p-4 justify-between w-full">
           <div className="flex items-center gap-2">
-            <div className="min-w-[100px] min-h-[100px] flex items-center justify-center border-2 border-slate-500 rounded-full hidden sm:hidden md:hidden lg:block">
-              이미지
+            <div className="min-w-[100px] min-h-[100px] flex items-center justify-center rounded-full hidden sm:hidden md:hidden lg:block">
+              <Image
+                src="/image/profile-pokemon.png"
+                width={100}
+                height={100}
+                alt="포켓몬볼"
+                className="w-full h-auto"
+              />
             </div>
             <div className="flex flex-col gap-2">
               <div className="flex justify-between px-2">
-                {/* TODO 닉네임으로 바꾸기 */}
-                <div className="mr-8">닉네임</div>
+                <div className="mr-8">{comment.nickname}</div>
                 <div>{commentDate}</div>
               </div>
-              <div className="p-2 border-2 w-full">
+              <div className="p-2 w-full">
                 {isEditing ? (
                   <div className="flex w-full justify-between">
                     <input
@@ -146,10 +171,10 @@ const PokemonDetailCommentItem = ({
               </div>
             </div>
           </div>
-          {!isEditing && (
+          {myId === comment?.user_id && !isEditing && (
             <div className="flex gap-2 cursor-pointer whitespace-nowrap p-2">
               <button onClick={OnClickEditBtn}>수정</button>
-              <button>삭제</button>
+              <button onClick={removeComment}>삭제</button>
             </div>
           )}
         </div>
