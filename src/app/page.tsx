@@ -3,8 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import Image from "next/image";
-import openDevice from "../app/img/opendevice.png";
-import closeDevice from "../app/img/closedevice.png";
+// import openDevice from "../app/img/opendevice.png";
 
 export default function Home() {
   const [isHovered, setIsHovered] = useState(false);
@@ -20,18 +19,19 @@ export default function Home() {
         <div className="flex flex-col items-center">
           {isHovered ? (
             <Image
-              src={openDevice}
+              src="/image/opendevice.png"
               alt="Opened Device"
-              width={500}
-              height={500}
+              width={600}
+              height={600}
               className="border-none shadow-none"
+              style={{ height: "auto" }}
             />
           ) : (
             <Image
-              src={closeDevice}
+              src="/image/closedevice.png"
               alt="Closed Device"
-              width={500}
-              height={500}
+              width={400}
+              height={400}
               className="border-none shadow-none"
             />
           )}

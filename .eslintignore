@@ -1,0 +1,3 @@
+src/types/supabase.users.types.ts
+src/app/api/**
+src/app/api/pokemons/route.ts

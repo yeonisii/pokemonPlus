@@ -3,101 +3,11 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
 import styled from "styled-components";
 import Image from "next/image";
-import logo from "../img/pokemonlogo_nukki.png";
-import searchicon from "../img/searchicon.png";
-import usericon from "../img/usericon.png";
+// import logo from "../img/pokemonlogo_nukki.png";
+// import searchicon from "../img/searchicon.png";
 import { useSearchStore } from "@/zustand/useSearchStore";
 import { useRouter, usePathname } from "next/navigation";
 import Cookies from "js-cookie"; // 추가됨
-
-const HeaderComponent: React.FC = () => {
-  const setSearchTerm = useSearchStore((state) => state.setSearchTerm);
-  const router = useRouter();
-  const pathname = usePathname();
-  const [isClient, setIsClient] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
-  };
-
-  useEffect(() => {
-    const checkLoginStatus = () => {
-      const session = Cookies.get("session");
-      setIsLoggedIn(!!session);
-    };
-
-    checkLoginStatus();
-    setIsClient(true);
-  }, []);
-
-  const goToList = () => {
-    if (isClient) {
-      router.push("/pokemonList");
-    }
-  };
-
-  const goToMyPage = () => {
-    if (isClient) {
-      router.push("/myPage");
-    }
-  };
-
-  const goToSignIn = () => {
-    if (isClient) {
-      router.push("/sign-in");
-    }
-  };
-
-  const handleLogout = () => {
-    Cookies.remove("session"); // 쿠키를 삭제
-    setIsLoggedIn(false);
-    if (isClient) {
-      router.push("/");
-    }
-  };
-
-  const isDetailPage = pathname.includes("/pokemonList/");
-
-  return (
-    <Header>
-      <LogoContainer onClick={goToList}>
-        <Image
-          src={logo}
-          alt="Pokemon Logo"
-          layout="intrinsic"
-          width={160}
-          height={60}
-        />
-      </LogoContainer>
-      {!isDetailPage && (
-        <SearchContainer>
-          <SearchInput
-            type="text"
-            placeholder="Search..."
-            onChange={handleSearch}
-          />
-          <SearchButton>
-            <Image src={searchicon} alt="Search Icon" width={24} height={24} />
-          </SearchButton>
-        </SearchContainer>
-      )}
-      <UserContainer>
-        <Divider />
-        <UserIconWrapper onClick={goToMyPage}>
-          <Image src={usericon} alt="User Icon" width={40} height={40} />
-        </UserIconWrapper>
-        {!isLoggedIn ? (
-          <Button onClick={goToSignIn}>Sign in</Button>
-        ) : (
-          <Button onClick={handleLogout}>Sign out</Button>
-        )}
-      </UserContainer>
-    </Header>
-  );
-};
-
-export default HeaderComponent;
 
 // 스타일 컴포넌트
 
@@ -171,3 +81,75 @@ const Button = styled.button`
   height: 40px;
   margin-left: 10px;
 `;
+
+const HeaderComponent: React.FC = () => {
+  const setSearchTerm = useSearchStore((state) => state.setSearchTerm);
+  const router = useRouter();
+  const [isClient, setIsClient] = useState(false);
+
+  const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+  };
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  const goToList = () => {
+    if (isClient) {
+      router.push("/pokemonList");
+    }
+  };
+
+  const goToMyPage = () => {
+    if (isClient) {
+      router.push("/myPage");
+    }
+  };
+
+  return (
+    <Header>
+      <LogoContainer onClick={goToList}>
+        <Image
+          src="/image/pokemonlogo_nukki.png"
+          alt="Pokemon Logo"
+          // layout="intrinsic"
+          width={160}
+          height={60}
+          style={{ width: "auto" }}
+        />
+      </LogoContainer>
+      <SearchContainer>
+        <SearchInput
+          type="text"
+          placeholder="Search..."
+          onChange={handleSearch}
+        />
+        <SearchButton>
+          <Image
+            src="/image/searchicon.png"
+            alt="Search Icon"
+            width={24}
+            height={24}
+            style={{ width: "auto" }}
+          />
+        </SearchButton>
+      </SearchContainer>
+      <UserContainer onClick={goToMyPage}>
+        <UserIconWrapper>
+          <Image
+            src="/image/usericon.png"
+            alt="User Icon"
+            width={40}
+            height={40}
+            style={{ width: "100%", height: "auto" }}
+          />
+        </UserIconWrapper>
+        <Divider />
+        <Button>Sign up</Button>
+      </UserContainer>
+    </Header>
+  );
+};
+
+export default HeaderComponent;
