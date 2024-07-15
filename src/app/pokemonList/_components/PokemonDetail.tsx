@@ -11,7 +11,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/effect-cards";
 import { EffectCards } from "swiper/modules";
-import detail_bg from "@/app/img/detail_bg.png";
+// import detail_bg from "@/public/image/detail_bg.png";
 
 export const PokemonDetail = ({ id }: { id: string }) => {
   const {
@@ -63,7 +63,7 @@ export const PokemonDetail = ({ id }: { id: string }) => {
       <div
         className="pokemon-details bg-white text-black p-8 rounded-2xl mx-auto border-8 border-gray-300"
         style={{
-          backgroundImage: `url(${detail_bg.src})`,
+          backgroundImage: `url(${"/image/detail_bg.png"})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}

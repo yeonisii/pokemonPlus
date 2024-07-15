@@ -3,7 +3,7 @@
 import React from "react";
 import styled from "styled-components";
 import Image from "next/image";
-import psyduck from "../img/psyduckicon.png"; // 싸이덕 아이콘
+// import psyduck from "../img/psyduckicon.png"; // 싸이덕 아이콘
 
 const Container = styled.div`
   display: flex;
@@ -37,7 +37,12 @@ const FooterComponent = () => {
       <Footer>
         <CenterContainer>
           <Text>@2024 열일하조</Text>
-          <Image src={psyduck} alt="Psyduck" width={40} height={40} />
+          <Image
+            src="/image/psyduckicon.png"
+            alt="Psyduck"
+            width={40}
+            height={40}
+          />
           <Text>Pokemon_Plus</Text>
         </CenterContainer>
       </Footer>

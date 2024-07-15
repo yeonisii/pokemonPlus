@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import gif from "../img/animation2.gif";
 import styled from "styled-components";
 
 const LoadingWrapper = styled.div`
@@ -16,6 +15,8 @@ const LoadingWrapper = styled.div`
   bottom: 0;
   z-index: 100;
   background-color: #200f50;
+  width: 100vw;
+  height: 100vh;
 `;
 
 const Loading = () => {
@@ -35,7 +36,13 @@ const Loading = () => {
 
   return (
     <LoadingWrapper>
-      <Image src={gif} alt="Loading..." priority={true} />
+      <Image
+        src="/image/Animation2.gif"
+        alt="Loading..."
+        priority={true}
+        width={300}
+        height={300}
+      />
     </LoadingWrapper>
   );
 };

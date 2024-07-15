@@ -3,9 +3,8 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
 import styled from "styled-components";
 import Image from "next/image";
-import logo from "../img/pokemonlogo_nukki.png";
-import searchicon from "../img/searchicon.png";
-import usericon from "../img/usericon.png";
+// import logo from "../img/pokemonlogo_nukki.png";
+// import searchicon from "../img/searchicon.png";
 import { useSearchStore } from "@/zustand/useSearchStore";
 import { useRouter } from "next/navigation";
 
@@ -20,7 +19,7 @@ const Header = styled.header`
 const LogoContainer = styled.div`
   display: flex;
   align-items: center;
-  height: 60px; 
+  height: 60px;
   cursor: pointer;
 `;
 
@@ -108,11 +107,11 @@ const HeaderComponent: React.FC = () => {
     <Header>
       <LogoContainer onClick={goToList}>
         <Image
-          src={logo}
+          src="/image/pokemonlogo_nukki.png"
           alt="Pokemon Logo"
           layout="intrinsic"
           width={160}
-          height={60} 
+          height={60}
         />
       </LogoContainer>
       <SearchContainer>
@@ -122,12 +121,22 @@ const HeaderComponent: React.FC = () => {
           onChange={handleSearch}
         />
         <SearchButton>
-          <Image src={searchicon} alt="Search Icon" width={24} height={24} />
+          <Image
+            src="/image/searchicon.png"
+            alt="Search Icon"
+            width={24}
+            height={24}
+          />
         </SearchButton>
       </SearchContainer>
       <UserContainer onClick={goToMyPage}>
         <UserIconWrapper>
-          <Image src={usericon} alt="User Icon" width={40} height={40} />
+          <Image
+            src="/image/usericon.png"
+            alt="User Icon"
+            width={40}
+            height={40}
+          />
         </UserIconWrapper>
         <Divider />
         <SignUpButton>Sign up</SignUpButton>
