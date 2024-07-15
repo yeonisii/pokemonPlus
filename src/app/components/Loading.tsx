@@ -40,8 +40,9 @@ const Loading = () => {
         src="/image/Animation2.gif"
         alt="Loading..."
         priority={true}
-        width={300}
-        height={300}
+        width={200}
+        height={200}
+        style={{ width: "auto" }}
       />
     </LoadingWrapper>
   );

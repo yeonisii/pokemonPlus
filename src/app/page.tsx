@@ -24,6 +24,7 @@ export default function Home() {
               width={600}
               height={600}
               className="border-none shadow-none"
+              style={{ height: "auto" }}
             />
           ) : (
             <Image
