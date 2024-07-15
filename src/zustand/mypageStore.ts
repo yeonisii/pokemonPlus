@@ -12,8 +12,8 @@ interface MypageState {
 }
 
 const useMypage = create<MypageState>((set) => ({
-  nickname: "string",
-  profileImage: "/image/profile-pokemon.png",
+  nickname: "",
+  profileImage: "",
   favoritePokemons: [],
   comments: [],
   setNickname: (nickname: string) => set({ nickname }),

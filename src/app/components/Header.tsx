@@ -6,7 +6,10 @@ import Image from "next/image";
 // import logo from "../img/pokemonlogo_nukki.png";
 // import searchicon from "../img/searchicon.png";
 import { useSearchStore } from "@/zustand/useSearchStore";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
+import Cookies from "js-cookie"; // 추가됨
+
+// 스타일 컴포넌트
 
 const Header = styled.header`
   display: flex;
@@ -66,7 +69,7 @@ const Divider = styled.div`
   margin: 0 10px;
 `;
 
-const SignUpButton = styled.button`
+const Button = styled.button`
   background-color: #374151;
   color: white;
   border: none;
@@ -76,6 +79,7 @@ const SignUpButton = styled.button`
   font-size: 16px;
   width: 144px;
   height: 40px;
+  margin-left: 10px;
 `;
 
 const HeaderComponent: React.FC = () => {
@@ -109,9 +113,10 @@ const HeaderComponent: React.FC = () => {
         <Image
           src="/image/pokemonlogo_nukki.png"
           alt="Pokemon Logo"
-          layout="intrinsic"
+          // layout="intrinsic"
           width={160}
           height={60}
+          style={{ width: "auto" }}
         />
       </LogoContainer>
       <SearchContainer>
@@ -126,6 +131,7 @@ const HeaderComponent: React.FC = () => {
             alt="Search Icon"
             width={24}
             height={24}
+            style={{ width: "auto" }}
           />
         </SearchButton>
       </SearchContainer>
@@ -136,10 +142,11 @@ const HeaderComponent: React.FC = () => {
             alt="User Icon"
             width={40}
             height={40}
+            style={{ width: "100%", height: "auto" }}
           />
         </UserIconWrapper>
         <Divider />
-        <SignUpButton>Sign up</SignUpButton>
+        <Button>Sign up</Button>
       </UserContainer>
     </Header>
   );
