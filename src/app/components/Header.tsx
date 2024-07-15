@@ -7,7 +7,99 @@ import logo from "../img/pokemonlogo_nukki.png";
 import searchicon from "../img/searchicon.png";
 import usericon from "../img/usericon.png";
 import { useSearchStore } from "@/zustand/useSearchStore";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
+import Cookies from "js-cookie"; // 추가됨
+
+const HeaderComponent: React.FC = () => {
+  const setSearchTerm = useSearchStore((state) => state.setSearchTerm);
+  const router = useRouter();
+  const pathname = usePathname();
+  const [isClient, setIsClient] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+  };
+
+  useEffect(() => {
+    const checkLoginStatus = () => {
+      const session = Cookies.get("session");
+      setIsLoggedIn(!!session);
+    };
+
+    checkLoginStatus();
+    setIsClient(true);
+  }, []);
+
+  const goToList = () => {
+    if (isClient) {
+      router.push("/pokemonList");
+    }
+  };
+
+  const goToMyPage = () => {
+    if (isClient) {
+      router.push("/myPage");
+    }
+  };
+
+  const goToSignIn = () => {
+    if (isClient) {
+      router.push("/sign-in");
+    }
+  };
+
+  const handleLogout = () => {
+    Cookies.remove("session"); // 쿠키를 삭제
+    setIsLoggedIn(false);
+    if (isClient) {
+      router.push("/");
+    }
+  };
+
+  const isDetailPage = pathname.includes("/pokemonList/");
+
+  return (
+    <Header>
+      <LogoContainer onClick={goToList}>
+        <Image
+          src={logo}
+          alt="Pokemon Logo"
+          layout="intrinsic"
+          width={160}
+          height={60}
+        />
+      </LogoContainer>
+      {!isDetailPage && (
+        <SearchContainer>
+          <SearchInput
+            type="text"
+            placeholder="Search..."
+            onChange={handleSearch}
+          />
+          <SearchButton>
+            <Image src={searchicon} alt="Search Icon" width={24} height={24} />
+          </SearchButton>
+        </SearchContainer>
+      )}
+      <UserContainer>
+        <Divider />
+        <UserIconWrapper onClick={goToMyPage}>
+          <Image src={usericon} alt="User Icon" width={40} height={40} />
+        </UserIconWrapper>
+        {!isLoggedIn ? (
+          <Button onClick={goToSignIn}>Sign in</Button>
+        ) : (
+          <Button onClick={handleLogout}>Sign out</Button>
+        )}
+      </UserContainer>
+    </Header>
+  );
+};
+
+export default HeaderComponent;
+
+// 스타일 컴포넌트
 
 const Header = styled.header`
   display: flex;
@@ -20,7 +112,7 @@ const Header = styled.header`
 const LogoContainer = styled.div`
   display: flex;
   align-items: center;
-  height: 60px; 
+  height: 60px;
   cursor: pointer;
 `;
 
@@ -67,7 +159,7 @@ const Divider = styled.div`
   margin: 0 10px;
 `;
 
-const SignUpButton = styled.button`
+const Button = styled.button`
   background-color: #374151;
   color: white;
   border: none;
@@ -77,63 +169,5 @@ const SignUpButton = styled.button`
   font-size: 16px;
   width: 144px;
   height: 40px;
+  margin-left: 10px;
 `;
-
-const HeaderComponent: React.FC = () => {
-  const setSearchTerm = useSearchStore((state) => state.setSearchTerm);
-  const router = useRouter();
-  const [isClient, setIsClient] = useState(false);
-
-  const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
-  };
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  const goToList = () => {
-    if (isClient) {
-      router.push("/pokemonList");
-    }
-  };
-
-  const goToMyPage = () => {
-    if (isClient) {
-      router.push("/myPage");
-    }
-  };
-
-  return (
-    <Header>
-      <LogoContainer onClick={goToList}>
-        <Image
-          src={logo}
-          alt="Pokemon Logo"
-          layout="intrinsic"
-          width={160}
-          height={60} 
-        />
-      </LogoContainer>
-      <SearchContainer>
-        <SearchInput
-          type="text"
-          placeholder="Search..."
-          onChange={handleSearch}
-        />
-        <SearchButton>
-          <Image src={searchicon} alt="Search Icon" width={24} height={24} />
-        </SearchButton>
-      </SearchContainer>
-      <UserContainer onClick={goToMyPage}>
-        <UserIconWrapper>
-          <Image src={usericon} alt="User Icon" width={40} height={40} />
-        </UserIconWrapper>
-        <Divider />
-        <SignUpButton>Sign up</SignUpButton>
-      </UserContainer>
-    </Header>
-  );
-};
-
-export default HeaderComponent;
