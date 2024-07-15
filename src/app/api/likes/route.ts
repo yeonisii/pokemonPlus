@@ -8,12 +8,18 @@ export const GET = async (req: Request) => {
   const cookieStore = cookies();
   const session = cookieStore.get("session");
 
+  console.log(session);
+  
+
   if (!session) {
     return NextResponse.json({ success: false, error: "400 BAD REQUEST" });
   }
 
   const { user } = JSON.parse(session.value);
   try {
+    console.log(user);
+    
+
     const { data, error } = await supabase
       .from("likes")
       .select("pokemon_id")

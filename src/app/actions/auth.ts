@@ -34,6 +34,9 @@ export async function signIn(formData: LoginFormData) {
     .eq("email", email)
     .single();
 
+    console.log('signIn Func-----------');
+    console.log(data);
+
   if (error || !data) {
     return { success: false, error: "사용자를 찾을 수 없습니다." };
   }
@@ -43,6 +46,8 @@ export async function signIn(formData: LoginFormData) {
   if (!validPassword) {
     return { success: false, error: "비밀번호가 일치하지 않습니다." };
   }
+
+  
 
   const session = data ? {
     user: {
