@@ -1,8 +1,10 @@
+/* eslint-disable */
+
 import { NextResponse } from "next/server";
 import axios from "axios";
 
-export const TOTAL_POKEMON = 151;
-const PAGE_SIZE = 20;
+const TOTAL_POKEMON: number = 151;
+const PAGE_SIZE: number = 20;
 
 // 데이터를 가져오고 변환하는 로직을 별도의 함수로 분리
 const fetchPokemonData = async (id: number) => {

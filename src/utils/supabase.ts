@@ -37,7 +37,7 @@ export const allComments = async (id: string) => {
 };
 
 //댓글 추가
-export const addComment = async (newComment) => {
+export const addComment = async (newComment: any) => {
   const { data, error } = await supabase
     .from("comments")
     .insert(newComment)
@@ -51,7 +51,7 @@ export const addComment = async (newComment) => {
 };
 
 //댓글 수정
-export const updateComment = async ({ comment, id, row }) => {
+export const updateComment = async ({ comment, id, row }: any) => {
   const { data, error } = await supabase
     .from("comments")
     .update({ comment })
@@ -67,7 +67,7 @@ export const updateComment = async ({ comment, id, row }) => {
 };
 
 //댓글 삭제
-export const deleteComment = async ({ row, userId }) => {
+export const deleteComment = async ({ row, userId }: any) => {
   const { error } = await supabase
     .from("comments")
     .delete()

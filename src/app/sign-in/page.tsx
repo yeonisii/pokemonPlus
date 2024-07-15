@@ -1,5 +1,4 @@
 "use client";
-
 import Link from "next/link";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useRouter } from "next/navigation";
@@ -19,24 +18,20 @@ const LoginPage: React.FC = () => {
   } = useForm<LoginFormData>({
     mode: "onChange",
   });
-
   const router = useRouter();
-
   const onSubmit: SubmitHandler<LoginFormData> = async (data) => {
     if (isValid) {
-      const result = await signIn(data);
-
+      const result: any = await signIn(data);
       if (!result.success) {
         alert(result.error);
         return;
       } else {
-        Cookies.set("session", result.token, { expires: 1, path: "/" }); // 1일 동안 유효한 쿠키 설정
         router.replace("/pokemonList");
+        Cookies.set("session", result.token, { expires: 1, path: "/" }); // 1일 동안 유효한 쿠키 설정
         return;
       }
     }
   };
-
   return (
     <div className="flex justify-center items-center h-screen bg-gradient-to-br from-cyan-400 to-blue-500">
       <div className="bg-white bg-opacity-20 backdrop-blur-lg rounded-3xl shadow-xl overflow-hidden w-full max-w-md">
@@ -103,5 +98,4 @@ const LoginPage: React.FC = () => {
     </div>
   );
 };
-
 export default LoginPage;
