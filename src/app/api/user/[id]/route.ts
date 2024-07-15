@@ -5,15 +5,21 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-export async function GET() {
+export async function GET(
+  _request: Request,
+  { params }: { params: { id: string } }
+) {
   // supabase에 있는 user정보 불러오기. (user에 있는 user_id)
-
+  console.log("params", params);
+  const { id } = params;
   const { data, error } = await supabase
-    .from("user")
-    .select("user, user_id")
-    .eq("user_id", "user_id"); // Correct
+    .from("users")
+    .select("*")
+    .eq("id", id)
+    .single();
 
   if (error) console.log("error", error);
+  console.log("myData User =======>", data);
 
   return Response.json({ data });
 }
